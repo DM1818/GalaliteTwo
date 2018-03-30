@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00654a09-8a1b-4be2-bdc4-46876ac70472" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.java" afterPath="$PROJECT_DIR$/352Galalite2/src/GalaliteController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/352Galalite2/src/gui/Main.java" afterPath="$PROJECT_DIR$/352Galalite2/src/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml" afterPath="$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/352Galalite2/src/gui/package-info.java" afterPath="$PROJECT_DIR$/352Galalite2/src/gui/package-info.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/352Galalite2/src/GalaliteController.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/352Galalite2/src/Main.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/352Galalite2/src/assets/space_bg.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/352Galalite2/src/Main.java">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="270">
+              <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -41,24 +39,47 @@
         </entry>
       </file>
       <file leaf-file-name="GalaliteController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/352Galalite2/src/GalaliteController.java">
+        <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+            <state relative-caret-position="105">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GalaliteController.fxml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml">
+      <file leaf-file-name="GalaliteController.fxml" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.fxml">
           <provider editor-type-id="JavaFX-Scene-Builder">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="239" lean-forward="false" selection-start-line="7" selection-start-column="239" selection-end-line="7" selection-end-column="239" />
-              <folding />
+            <state relative-caret-position="150">
+              <caret line="10" column="13" lean-forward="true" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+              <folding>
+                <marker date="1521213124063" expanded="true" signature="1375:1408" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1375:3298" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1375:3316" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1375:3335" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1375:3350" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1375:3364" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1434:3188" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1565:3161" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1597:3135" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1665:3102" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1703:2943" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1774:2111" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1814:1912" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="1955:2072" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2185:2508" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2225:2323" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2366:2469" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2581:2904" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2621:2719" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2762:2865" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="2980:3070" ph="..." />
+                <marker date="1521213124063" expanded="true" signature="3218:3278" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -76,9 +97,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/352Galalite2/src/GalaliteController.java" />
         <option value="$PROJECT_DIR$/352Galalite2/src/Main.java" />
         <option value="$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml" />
+        <option value="$PROJECT_DIR$/352Galalite2/src/GalaliteController.java" />
       </list>
     </option>
   </component>
@@ -133,13 +154,6 @@
               <item name="GalaliteTwo" type="462c0819:PsiDirectoryNode" />
               <item name="352Galalite2" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="GalaliteTwo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="GalaliteTwo" type="462c0819:PsiDirectoryNode" />
-              <item name="352Galalite2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="gui" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -155,6 +169,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.build" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -268,16 +283,15 @@
       <option name="presentableId" value="Default" />
       <updated>1521160870811</updated>
       <workItem from="1521160876196" duration="376000" />
-      <workItem from="1521161257433" duration="317000" />
+      <workItem from="1521161257433" duration="1027000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="693000" />
+    <option name="totallyTimeSpent" value="1403000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="683" height="746" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -291,7 +305,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5226209" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5226209" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -326,7 +340,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/Main.java">
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -336,7 +350,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/GalaliteController.java">
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="7" column="24" lean-forward="true" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
@@ -344,14 +358,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml">
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.fxml">
       <provider editor-type-id="JavaFX-Scene-Builder">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1521213124063" expanded="true" signature="1375:1408" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3298" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3316" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3335" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3350" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3364" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1434:3188" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1565:3161" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1597:3135" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1665:3102" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1703:2943" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1774:2111" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1814:1912" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1955:2072" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2185:2508" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2225:2323" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2366:2469" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2581:2904" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2621:2719" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2762:2865" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2980:3070" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="3218:3278" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -363,32 +400,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/GalaliteController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/352Galalite2/src/gui/GalaliteController.fxml">
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.fxml">
       <provider editor-type-id="JavaFX-Scene-Builder">
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="13" lean-forward="true" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding>
+            <marker date="1521213124063" expanded="true" signature="1375:1408" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3298" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3316" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3335" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3350" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1375:3364" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1434:3188" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1565:3161" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1597:3135" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1665:3102" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1703:2943" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1774:2111" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1814:1912" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="1955:2072" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2185:2508" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2225:2323" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2366:2469" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2581:2904" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2621:2719" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2762:2865" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="2980:3070" ph="..." />
+            <marker date="1521213124063" expanded="true" signature="3218:3278" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/GalaliteController.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="7" column="239" lean-forward="false" selection-start-line="7" selection-start-column="239" selection-end-line="7" selection-end-column="239" />
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Documents/eclipse/GalaliteTwo/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
