@@ -16,7 +16,7 @@ public class Main extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("GalaliteController.fxml"));
         primaryStage.setTitle("Galalite2");
-        primaryStage.setScene(new Scene(root, 650, 500));
+        primaryStage.setScene(new Scene(root, 750, 500));
         primaryStage.show();
 	}
 }

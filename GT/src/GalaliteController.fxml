@@ -18,6 +18,14 @@
                         <Image url="@assets/space_bg.png" />
                      </image>
                   </ImageView>
+                  <Label fx:id="mainTitle" layoutX="76.0" layoutY="158.0" text="Galalite 2: The Revengence" textFill="WHITE">
+                     <font>
+                        <Font size="34.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="start" layoutX="245.0" layoutY="249.0" mnemonicParsing="false" onAction="#clickStart" text="Start!" />
+                  <Button fx:id="load" layoutX="225.0" layoutY="315.0" mnemonicParsing="false" text="Load Game" />
+                  <ListView fx:id="highscoreList" layoutX="170.0" layoutY="378.0" prefHeight="106.0" prefWidth="206.0" />
                </children>
             </Pane>
             <VBox prefHeight="350.0" prefWidth="207.0" style="-fx-background-color: mistyrose; -fx-border-color: black;" SplitPane.resizableWithParent="false">
@@ -27,37 +35,17 @@
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: mediumpurple; -fx-border-color: black;">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="167.0">
-                           <children>
-                              <Label text="Level: 2" textFill="WHITE">
-                                 <font>
-                                    <Font size="27.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" />
-                                 </padding>
-                              </Label>
-                              <Label text="Score: 23" textFill="#434343">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </Label>
-                              <Label text="Lives: 3" textFill="#404040">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets top="40.0" />
-                           </padding>
-                        </VBox>
+                        <Label fx:id="score" layoutX="14.0" layoutY="14.0" text="Score:">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lives" layoutX="14.0" layoutY="90.0" text="Lives:">
+                           <font>
+                              <Font size="33.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="currentHighscore" layoutX="14.0" layoutY="176.0" text="Highscore:" />
                      </children>
                   </Pane>
                </children>
