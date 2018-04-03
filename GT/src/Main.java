@@ -8,15 +8,32 @@ import javafx.stage.Stage;
 
 public class Main extends Application{
 
+	private static Stage primaryStage;
+	private static Scene primaryScene;
+
+	public static Stage getStage() {
+		return primaryStage;
+	}
+
+	public static Scene getScene() {
+		return primaryScene;
+	}
+
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("GalaliteController.fxml"));
-        primaryStage.setTitle("Galalite2");
-        primaryStage.setScene(new Scene(root, 750, 500));
+		this.primaryStage = primaryStage;
+
+		Parent root = FXMLLoader.load(getClass().getResource("StartScreen.fxml"));
+		this.primaryScene = new Scene(root,800,600);
+
+		primaryStage.setTitle("Galalite2");
+        primaryStage.setScene(primaryScene);
         primaryStage.show();
+
+
 	}
 }
