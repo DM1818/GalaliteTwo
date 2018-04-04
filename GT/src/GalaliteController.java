@@ -63,6 +63,23 @@ public class GalaliteController {
 
 	Database db = new Database();
 
+	private Movement clock;
+	private PlayerShip player;
+
+	private long fps = 60L;
+	private long interval = 1000000000L / fps;
+
+	private class Movement extends AnimationTimer {
+		private long lastInterval = 0;
+
+		@Override
+		public void handle(long now) {
+			if (now - lastInterval >= interval) {
+				lastInterval = now;
+			}
+		}
+	}
+
 	public void initialize() {
 		stage = Main.getStage();
 
@@ -72,6 +89,25 @@ public class GalaliteController {
 		if (highscoreList != null) {
 			highscoreList.setItems(db.getAllHighscores());
 		}
+
+		clock = new Movement();
+		Rectangle r = new Rectangle();
+		pane.getChildren().add(r);
+
+		r.setOnKeyPressed((KeyEvent key) -> { //https://stackoverflow.com/questions/41900685/waiting-a-keyevent?noredirect=1&lq=1
+			System.out.println("movePlayer");
+			if (key.getCode() == KeyCode.A) {
+				player.move(-1);
+			} else if (key.getCode() == KeyCode.D) {
+				player.move(1);
+			}
+			player.draw();
+			pane.requestFocus();
+		});
+
+		player = new PlayerShip(r, pane);
+		player.setInvisible();
+
 	}
 	
 //	public void clickStart() {
@@ -86,6 +122,10 @@ public class GalaliteController {
 //		score.setText("Score: 0");
 //		lives.setText("Lives: 3");
 //		currentHighscore.setText("Highscore: " + db.getHighscore());
+//
+//		clock.start();          //
+//		player.setVisisble();   // This is used in my version. Jacob
+//		player.draw();          //
 //	}
 
 	@FXML
