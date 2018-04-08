@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pauseScreen" prefHeight="500.0" prefWidth="801.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GalaliteController">
+<AnchorPane fx:id="pauseScreen" prefHeight="500.0" prefWidth="801.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StartController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="360.0" AnchorPane.rightAnchor="360.0">
          <children>

@@ -11,6 +11,7 @@ public class Main extends Application{
 	private static Stage primaryStage;
 	private static Scene primaryScene;
 
+
 	public static Stage getStage() {
 		return primaryStage;
 	}
@@ -28,7 +29,7 @@ public class Main extends Application{
 		this.primaryStage = primaryStage;
 
 		Parent root = FXMLLoader.load(getClass().getResource("StartScreen.fxml"));
-		this.primaryScene = new Scene(root,800,600);
+		this.primaryScene = new Scene(root,1200,800);
 
 		primaryStage.setTitle("Galalite2");
         primaryStage.setScene(primaryScene);

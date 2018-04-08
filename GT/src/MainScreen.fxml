@@ -7,17 +7,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="canvas" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GalaliteController">
+<AnchorPane fx:id="canvas" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
    <children>
       <SplitPane fx:id="mainScreen" dividerPositions="0.7" prefHeight="361.0" prefWidth="572.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <Pane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
+            <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
                <children>
-                  <ImageView fitHeight="498.0" fitWidth="746.0" layoutX="-118.0">
-                     <image>
-                        <Image url="@assets/space_bg.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fitHeight="866.0" fitWidth="1011.0" layoutX="-118.0" preserveRatio="true" smooth="false" />
                </children>
             </Pane>
             <VBox prefHeight="350.0" prefWidth="207.0" style="-fx-background-color: blue; -fx-border-color: black;" SplitPane.resizableWithParent="false">

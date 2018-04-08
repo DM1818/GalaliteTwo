@@ -4,14 +4,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 public class Ship {
-	protected double xSize;
-	protected double ySize;
-	protected double xCord;
-	protected double yCord;
-	protected double dx;
-	protected double dy;
-	protected Rectangle ship;
-	protected Pane space;
+	double xSize;
+	double ySize;
+	double xCord;
+	double yCord;
+	double dx;
+	double dy;
+	Rectangle ship;
+	public boolean firing;
+	double screenHeight;
+	double screenWidth;
+	int moving;
+	Pane space;
 
 	public double getXSize() {
 		return xSize;
@@ -38,8 +42,14 @@ public class Ship {
 	}
 
 	public void move(int dir) {
-		xCord += (dx * dir);
-		yCord += (dy * dir);
+		moving = dir;
+//		xCord += (dx * dir);
+//		yCord += (dy * dir);
+//		System.out.println(xCord);
+	}
+
+	public void stop() {
+		moving = 0;
 	}
 
 	public void setInvisible() {
@@ -50,12 +60,7 @@ public class Ship {
 		ship.setVisible(true);
 	}
 
-	public void draw() {
-		ship.setWidth(xSize);
-		ship.setHeight(ySize);
-		ship.setTranslateX(xCord);
-		ship.setTranslateY(yCord);
-	}
+
 
 }
 
