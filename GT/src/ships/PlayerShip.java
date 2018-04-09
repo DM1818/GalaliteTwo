@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 
 public class PlayerShip extends Ship {
 
-	public PlayerShip(Rectangle ship, Pane space, double screenWidth, double screenHeight) {
+	public PlayerShip(Rectangle ship, double screenWidth, double screenHeight) {
 		this.screenWidth = screenWidth;
 		double ratioWidth = screenWidth / 15.0;
 		double ratioHeight = screenHeight / 12.0;
@@ -18,11 +18,10 @@ public class PlayerShip extends Ship {
 		xSize = ratioWidth;
 		xCord = screenWidth / 2.0;
 		yCord = screenHeight - (screenHeight / 10.0);
-		dx = xSize;
+		dx = xSize / 3;
 		firing = false;
 		dy = 0;
 		this.ship  = ship;
-		this.space = space;
 		ship.setFill(new ImagePattern(new Image("/assets/player.png",ratioWidth,ratioHeight,false,false)));
 
 	}
@@ -32,6 +31,9 @@ public class PlayerShip extends Ship {
 	}
 
 	public void update() {
-		xCord += (dx * moving);
+		double temp = xCord + (dx * moving);
+		if (!(temp < 0 || temp + xSize > screenWidth)) {
+			xCord += (dx * moving);
+		}
 	}
 }

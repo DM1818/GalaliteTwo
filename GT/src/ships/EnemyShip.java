@@ -6,7 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 public class EnemyShip extends Ship {
 
-	public EnemyShip(Rectangle ship, Pane space, double xSize, double ySize, double xCord, double yCord) {
+	public EnemyShip(Rectangle ship, double xSize, double ySize, double xCord, double yCord) {
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.xCord = xCord;
@@ -14,7 +14,6 @@ public class EnemyShip extends Ship {
 		dx = 1;
 		dy = 0;
 		this.ship  = ship;
-		this.space = space;
 		this.ship.setFill(Color.RED);
 	}
 

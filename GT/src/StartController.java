@@ -15,11 +15,15 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import ships.PlayerShip;
 
 import java.beans.EventHandler;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 
 public class StartController {
@@ -81,24 +85,6 @@ public class StartController {
 		highscoreList.setItems(db.getAllHighscores());
 
 	}
-	
-//	public void clickStart() {
-//		displayGameScreen();
-//	}
-//
-//	public void displayGameScreen() {
-//		mainTitle.setVisible(false);
-//		toMainScreen.setVisible(false);
-//		load.setVisible(false);
-//		highscoreList.setVisible(false);
-//		score.setText("Score: 0");
-//		lives.setText("Lives: 3");
-//		currentHighscore.setText("Highscore: " + db.getHighscore());
-//
-//		clock.toMainScreen();          //
-//		player.setVisisble();   // This is used in my version. Jacob
-//		player.draw();          //
-//	}
 
 	@FXML
 	private void toMainScreen() {
@@ -107,7 +93,20 @@ public class StartController {
 
 	@FXML
 	private void load() {
-
+		ArrayList<String> list = db.getSaveNames();
+		Object[] options = new Object[list.size()];
+		for(int i=0; i<list.size(); i++) {
+			options[i] = list.get(i);
+		}
+		
+		String s = (String)JOptionPane.showInputDialog(
+		                    null,
+		                   "Choose your saved game",
+		                    "Customized Dialog",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    options,
+		                    null);
 	}
 
 

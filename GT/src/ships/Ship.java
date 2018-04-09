@@ -15,7 +15,6 @@ public class Ship {
 	double screenHeight;
 	double screenWidth;
 	int moving;
-	Pane space;
 
 	public double getXSize() {
 		return xSize;
@@ -54,6 +53,10 @@ public class Ship {
 		moving = 0;
 	}
 
+	public Rectangle getRect() {
+		return ship;
+	}
+	
 	public void setInvisible() {
 		ship.setVisible(false);
 	}

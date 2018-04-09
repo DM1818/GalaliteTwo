@@ -16,6 +16,8 @@ import ships.Ship;
 
 import java.util.ArrayList;
 
+import core.Database;
+
 public class MainController {
 
     private PlayerShip player;
@@ -37,14 +39,16 @@ public class MainController {
     @FXML
     private Pane gamePane;
 
-    private ArrayList<Ship> friendlyObjects;
     private ArrayList<Ship> enemyObjects = new ArrayList<Ship>();
     private ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
+    private ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
 
     private int enemyRows    = 3;
     private int enemyColumns = 5;
 
     private Parent parent;
+    
+    private Database db = new Database();
 
     @FXML
     private void initialize() {
@@ -54,7 +58,8 @@ public class MainController {
                     setUpBackground();
                     setUpPlayer();
                     setUpEnemy();
-
+                    db.saveShips(enemyObjects, player, "test");
+                    db.getEnemyShips("test");
         });
         //System.out.println("Hello");
 
@@ -124,7 +129,7 @@ public class MainController {
     	if (playerBullets.size() < 2) {
     		Rectangle r = new Rectangle(5, 5);
     		gamePane.getChildren().add(r);
-    		Bullet bullet = new Bullet(r, gamePane, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0, gamePane.getHeight() / -10);
+    		Bullet bullet = new Bullet(r, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0, gamePane.getHeight() / -10);
     		playerBullets.add(bullet);
     		bullet.draw();
     	}
@@ -135,7 +140,7 @@ public class MainController {
         clock.start();
         Rectangle r = new Rectangle(5,5);
         gamePane.getChildren().add(r);
-        player = new PlayerShip(r, gamePane, gamePane.getWidth(), gamePane.getHeight());
+        player = new PlayerShip(r, gamePane.getWidth(), gamePane.getHeight());
         player.draw();
     }
 
@@ -149,7 +154,7 @@ public class MainController {
     			
     			Rectangle r = new Rectangle(5, 5);
     			gamePane.getChildren().add(r);
-    			EnemyShip baddy = new EnemyShip(r, gamePane, xLength, yLength, xCord, yCord);
+    			EnemyShip baddy = new EnemyShip(r, xLength, yLength, xCord, yCord);
     			enemyObjects.add(baddy);
     			baddy.draw();
     		}
@@ -163,19 +168,20 @@ public class MainController {
 
     private void detectCollision() {
         // check friendly collision
-    	for (Bullet b : playerBullets) {
-    		for (Ship s : enemyObjects) {
-    			if (detectCollisionHelper(s, b)) {
-    				s.setInvisible();
-        			b.setInvisible();
-        			enemyObjects.remove(s);
-        			playerBullets.remove(b);
-    			}
-    		}
-    		if (detectOutOfBoundBullets(b)) {
-    			playerBullets.remove(b);
-    		}
-    	}
+    	Platform.runLater(() -> {
+	    	for (Bullet b : playerBullets) {
+	    		for (Ship s : enemyObjects) {
+	    			if (detectCollisionHelper(s, b)) {
+	    				
+	        			enemyObjects.remove(s);
+	        			playerBullets.remove(b);
+	    			}
+	    		}
+	    		if (detectOutOfBoundBullets(b)) {
+	    			playerBullets.remove(b);
+	    		}
+	    	}
+	    	});
         // check enemy collision
     }
     
@@ -196,6 +202,21 @@ public class MainController {
     	return false;
     }
     
+    private void enemyFire(Ship e) {
+    	if (Math.random() * enemyObjects.size() * 5 <= 1) {
+    		spawnEnemyBullet(e);
+    	}
+    }
+    
+    private void spawnEnemyBullet(Ship e) {
+    	Rectangle r = new Rectangle();
+    	gamePane.getChildren().add(r);
+    	
+    	
+    	
+    	//Bullet bullet = new Bullet(r, 5, 12, e.getXCord() + (e.getXSize() / 2), e.getYCord() + e.getYSize(), )TODO
+    }
+    
     private class Movement extends AnimationTimer {
         private long lastGameInterval = 0;
         private long lastBGInterval = 0;
@@ -203,15 +224,24 @@ public class MainController {
         public void handle(long now) {
             if (now - lastGameInterval >= interval) {
                 lastGameInterval = now;
+                
+                detectCollision();
+                gamePane.getChildren().clear();
+                
+                gamePane.getChildren().add(player.getRect());
                 player.update();
                 player.draw();
                 
+                for (Ship e : enemyObjects) {
+                	gamePane.getChildren().add(e.getRect());
+                	e.draw();
+                }
                 for (Ship s : playerBullets) {
+                	gamePane.getChildren().add(s.getRect());
                 	s.move();
                 	s.draw();
                 }
                 
-                detectCollision();
             } if (now - lastBGInterval >= bgInterval) {
                 lastBGInterval = now;
 
