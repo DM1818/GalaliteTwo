@@ -1,19 +1,33 @@
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+<<<<<<< HEAD
 //<<<<<<< HEAD
 import javafx.scene.image.Image;
 //=======
 import javafx.scene.control.Label;
 //>>>>>>> origin/master
+=======
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+
+import javafx.scene.control.Label;
+
+>>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ships.Bullet;
 import ships.EnemyShip;
 import ships.PlayerShip;
@@ -27,6 +41,7 @@ public class MainController {
 
     private PlayerShip player;
     private Scene scene;
+
 
     @FXML
     private Pane backgroundPane1;
@@ -80,7 +95,17 @@ public class MainController {
         //System.out.println("Hello");
     }
 
+<<<<<<< HEAD
 
+=======
+//<<<<<<< HEAD
+//    private void setUpBackground() {
+//        bg1 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
+//        bg2 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
+//        bg1.relocate( 0, -bg1.getImage().getHeight() + backgroundPane1.getHeight());
+//        //bg2.relocate(0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
+//=======
+>>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
     private void setUpGameState() {
     	String loading = db.getActiveLoad();
     	if (!loading.equals("")) {
@@ -100,7 +125,22 @@ public class MainController {
 	private void updateLives() {livesLabel.setText("Lives: " + lives);}
     private void updateScore() {scoreLabel.setText("Score: " + score);}
 
+<<<<<<< HEAD
 
+=======
+	private void setUpBackground() {
+        bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
+        bg2 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
+        bg1.relocate( 0, -bg1.getImage().getHeight() + gamePane.getHeight());
+        bg2.relocate(0, (-bg2.getImage().getHeight() * 2) + gamePane.getHeight());
+
+
+        backgroundPane1.getChildren().add(bg1);
+        //backgroundPane2.getChildren().add(bg2);
+        currentBG = bg1;
+        nextBG = bg2;
+    }
+>>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
 
     private void setUpKeyListener() {
         this.scene = Main.getScene();
@@ -188,8 +228,35 @@ public class MainController {
     }
     
     private void pause() {
-        // launch a popup new scene
-        //System.out.println("in pause");
+
+    }
+
+
+    @FXML
+    private void saveHighScore() {
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(Main.getStage());
+        VBox dialogVbox = new VBox(20);
+        dialogVbox.getChildren().add(new Text("Enter your name to save your high score"));
+        TextField tf = new TextField();
+        dialogVbox.getChildren().add(tf);
+
+        Button b = new Button("Save Score");
+        b.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String name = tf.getText();
+
+                // score = score
+                // TODO database interaction with score + name here
+            }
+        });
+
+        dialogVbox.getChildren().add(new Button("Save Score"));
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
     private ArrayList<ArrayList<Ship>> detectCollision() {
@@ -208,6 +275,7 @@ public class MainController {
                 if (detectCollisionHelper(s, b)) {
                     enemiesToRemove.add(s);
                     bulletsToRemove.add(b);
+                    score += 100;
                 }
             }
             if (detectOutOfBoundBullets(b)) {
@@ -267,13 +335,17 @@ public class MainController {
         public void handle(long now) {
             if (now - lastGameInterval >= interval) {
                 lastGameInterval = now;
+
                 
                 Platform.runLater(() -> {
                     ArrayList<ArrayList<Ship>> toRemove = detectCollision();
                     enemyObjects.removeAll(toRemove.get(0));
                     playerBullets.removeAll(toRemove.get(1));
                     redraw();
+                    updateScore();
+                    updateLives();
                 });
+
                 
             } /*if (now - lastBGInterval >= bgInterval) {
                 lastBGInterval = now;

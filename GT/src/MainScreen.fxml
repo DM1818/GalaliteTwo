@@ -52,6 +52,7 @@
                         </VBox>
                      </children>
                   </Pane>
+                  <Button mnemonicParsing="false" onAction="#saveHighScore" text="Save High Score" />
                </children>
                <opaqueInsets>
                   <Insets />

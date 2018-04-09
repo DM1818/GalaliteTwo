@@ -19,9 +19,9 @@
                <children>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black; -fx-border-color: black;">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="167.0">
+                        <VBox prefHeight="200.0" prefWidth="333.0">
                            <children>
-                              <Label text="Level: 2" textFill="WHITE">
+                              <Label fx:id="scoreLabel" text="Score: " textFill="WHITE">
                                  <font>
                                     <Font size="27.0" />
                                  </font>
@@ -29,7 +29,7 @@
                                     <Insets bottom="20.0" left="20.0" />
                                  </padding>
                               </Label>
-                              <Label text="Score: 23" textFill="#434343">
+                              <Label fx:id="livesLabel" text="Lives: " textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -37,7 +37,7 @@
                                     <Insets left="20.0" />
                                  </padding>
                               </Label>
-                              <Label text="Lives: 3" textFill="#404040">
+                              <Label fx:id="highscoreLabel" text="Highscore: " textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -52,6 +52,7 @@
                         </VBox>
                      </children>
                   </Pane>
+                  <Button mnemonicParsing="false" onAction="#saveHighScore" text="Save High Score" />
                </children>
                <opaqueInsets>
                   <Insets />
