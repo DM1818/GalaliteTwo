@@ -13,7 +13,7 @@ public class Bullet extends Ship {
 		this.dx    = dx;
 		this.dy    = dy;
 		this.ship  = ship;
-		this.ship.setFill(Color.BLACK);
+		this.ship.setFill(Color.WHITE);
 	}
 	
 	public double getDX() {return dx;}

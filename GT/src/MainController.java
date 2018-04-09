@@ -4,11 +4,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import javafx.scene.image.Image;
-=======
+//=======
 import javafx.scene.control.Label;
->>>>>>> origin/master
+//>>>>>>> origin/master
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -76,40 +76,31 @@ public class MainController {
                     setUpPlayer();
                     setUpEnemy();
                     setUpGameState();
-                    db.saveShips(enemyObjects, player, "test");
-                    db.getEnemyShips("test");
         });
         //System.out.println("Hello");
     }
 
-<<<<<<< HEAD
-    private void setUpBackground() {
-        bg1 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
-        bg2 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
-        bg1.relocate( 0, -bg1.getImage().getHeight() + backgroundPane1.getHeight());
-        //bg2.relocate(0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
-=======
+
     private void setUpGameState() {
+    	String loading = db.getActiveLoad();
+    	if (!loading.equals("")) {
+    		loadGame(loading);
+    	}
     	updateLives();
     	updateScore();
     	highscoreLabel.setText("Highscore: " + db.getHighscore());
 	}
     
-    private void updateLives() {livesLabel.setText("Lives: " + lives);}
+    private void loadGame(String loading) {
+    	lives = db.getAspectofGameState(loading, "lives");
+    	score = db.getAspectofGameState(loading, "score");
+	}
+
+
+	private void updateLives() {livesLabel.setText("Lives: " + lives);}
     private void updateScore() {scoreLabel.setText("Score: " + score);}
 
-	private void setUpBackground() {
-        bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
-        bg2 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
-        bg1.relocate( 0, -bg1.getImage().getHeight() + gamePane.getHeight());
-        bg2.relocate(0, (-bg2.getImage().getHeight() * 2) + gamePane.getHeight());
->>>>>>> origin/master
 
-        backgroundPane1.getChildren().add(bg1);
-        //backgroundPane2.getChildren().add(bg2);
-        currentBG = bg1;
-        nextBG = bg2;
-    }
 
     private void setUpKeyListener() {
         this.scene = Main.getScene();
