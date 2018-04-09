@@ -207,8 +207,9 @@ public class MainController {
     		}
     	}
     }
-    
+    @FXML
     private void pause() {
+        clock.stop();
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(Main.getStage());
@@ -220,6 +221,7 @@ public class MainController {
             @Override
             public void handle(ActionEvent event) {
                 dialog.close();
+                clock.start();
             }
         });
 
@@ -235,10 +237,12 @@ public class MainController {
 //                playerBullets;
 //                // +
 //                score;
-//                lives;z
+//                lives;
 
             }
         });
+        dialogVbox.getChildren().add(resume);
+        dialogVbox.getChildren().add(save);
 
         Scene dialogScene = new Scene(dialogVbox, 500, 300);
         dialog.setScene(dialogScene);
@@ -261,13 +265,13 @@ public class MainController {
             @Override
             public void handle(ActionEvent event) {
                 String name = tf.getText();
-
+                System.out.println("hi");
                 // score = score
                 // TODO database interaction with score + name here
             }
         });
 
-        dialogVbox.getChildren().add(new Button("Save Score"));
+        dialogVbox.getChildren().add(b);
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
