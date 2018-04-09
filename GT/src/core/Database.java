@@ -41,7 +41,7 @@ public class Database {
 				stat.close();
 			}
 			Class.forName("org.sqlite.JDBC");
-			Connection con = DriverManager.getConnection("jdbc:sqlite:Galalite");
+			Connection con = DriverManager.getConnection("jdbc:sqlite:GalaliteTwo");
 			stat = con.createStatement();
 		} catch (ClassNotFoundException | SQLException e) {
 			news = new BadNews("Couldn't connect to the database");

@@ -3,6 +3,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -23,11 +24,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ships.Bullet;
 import ships.EnemyShip;
 import ships.PlayerShip;
 import ships.Ship;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import core.Database;
@@ -98,13 +101,14 @@ public class MainController {
 		if (!loading.equals("")) {
 			System.out.println("loading...");
 			loadGame(loading);
+			Platform.runLater(() -> {
+				pause();
+			});
 		}
 		updateLives();
 		updateScore();
 		highscoreLabel.setText("Highscore: " + db.getHighscore());
-		Platform.runLater(() -> {
-			pause();
-		});
+		
 	}
 
 	private void loadGame(String loading) {
@@ -144,7 +148,7 @@ public class MainController {
 				switch (event.getCode()) {
 				case SPACE:
 					spawnPlayerBullet();
-					score -= 5;
+					
 					break;
 				case A:
 					currentKey = event.getCode();
@@ -186,6 +190,7 @@ public class MainController {
 
 	private void spawnPlayerBullet() {
 		if (playerBullets.size() < 2) {
+			score -= 5;
 			Rectangle r = new Rectangle(5, 5);
 			gamePane.getChildren().add(r);
 			Bullet bullet = new Bullet(r, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0,
@@ -267,16 +272,6 @@ public class MainController {
 				db.saveShips(enemyObjects, player, saveName);
 				db.saveBullets(enemyBullets, playerBullets, saveName);
 				db.insertGameInfo(saveName, lives, score);
-				// TODO database interaction here:
-				// these fields encapsulate the current game state:
-				// enemyBullets;
-				// enemyObjects; // just enemy ships
-				// player;
-				// playerBullets;
-				// // +
-				// score;
-				// lives;
-
 			}
 		});
 		dialogVbox.getChildren().add(save);
@@ -284,31 +279,42 @@ public class MainController {
 		Scene dialogScene = new Scene(dialogVbox, 500, 300);
 		dialog.setScene(dialogScene);
 		dialog.show();
-	}
-
-	@FXML
-	private void saveHighScore() {
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(Main.getStage());
-		VBox dialogVbox = new VBox(20);
-		dialogVbox.getChildren().add(new Text("Enter your name to save your high score"));
-		TextField tf = new TextField();
-		dialogVbox.getChildren().add(tf);
-
-		Button b = new Button("Save Score");
-		b.setOnAction((event) -> {
-			String name = tf.getText();
-			db.insertHighscore(name, score);
-			dialog.close();
+		dialog.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				dialog.close();
+				clock.start();
+			}
 		});
-		System.out.println("hi");
-
-		dialogVbox.getChildren().add(b);
-		Scene dialogScene = new Scene(dialogVbox, 300, 200);
-		dialog.setScene(dialogScene);
-		dialog.show();
 	}
+
+
+private void saveHighScore() {
+   
+      final Stage dialog = new Stage();
+      dialog.initModality(Modality.APPLICATION_MODAL);
+      dialog.initOwner(Main.getStage());
+      VBox dialogVbox = new VBox(20);
+      dialogVbox.getChildren().add(new Text("Enter your name to save your high score"));
+      TextField tf = new TextField();
+      dialogVbox.getChildren().add(tf);
+
+      Button b = new Button("Save Score");
+      b.setOnAction((event) -> {
+         String name = tf.getText();
+         db.insertHighscore(name, score);
+         dialog.close();
+      });
+      Button menu = new Button("Exit to Menu");
+      menu.setOnAction((event) -> {
+         changeScene("StartScreen.fxml");
+      });
+      dialogVbox.getChildren().add(b);
+      Scene dialogScene = new Scene(dialogVbox, 300, 200);
+      dialog.setScene(dialogScene);
+      dialog.show();
+   
+}
 
 	private ArrayList<ArrayList<Ship>> detectCollision() {
 		// check friendly collision
@@ -361,7 +367,8 @@ public class MainController {
 			player.setXCord(gamePane.getWidth() / 2);
 		} else {
 			clock.stop();
-			// TODO game over popup
+			saveHighScore();
+			changeScene("StartScreen.fxml");
 		}
 
 	}
@@ -523,4 +530,14 @@ public class MainController {
 		}
 
 	}
+	private void changeScene(String fxml) {
+		   try {
+		     Parent pane = FXMLLoader.load(
+		            getClass().getResource(fxml));
+			   Main.getStage().getScene().setRoot(pane);
+
+		   } catch (IOException e) {
+		      e.printStackTrace();
+		   }
+		}
 }

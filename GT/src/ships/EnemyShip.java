@@ -1,7 +1,9 @@
 package ships;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class EnemyShip extends Ship {
@@ -14,7 +16,7 @@ public class EnemyShip extends Ship {
 		dx = 1;
 		dy = 0;
 		this.ship  = ship;
-		this.ship.setFill(Color.RED);
+		this.ship.setFill(new ImagePattern(new Image("/assets/Enemy.png",xSize,ySize,false,false)));
 	}
 
 	@Override
