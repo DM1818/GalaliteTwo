@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,6 +24,14 @@ public class MainController {
     private PlayerShip player;
     private Scene scene;
 
+    @FXML
+    private Pane backgroundPane1;
+
+    @FXML
+    private ImageView background;
+
+    @FXML
+    private Pane backgroundPane2;
     private Movement clock;
     KeyCode currentKey;
 
@@ -40,8 +49,8 @@ public class MainController {
     private Pane gamePane;
 
     private ArrayList<Ship> enemyObjects = new ArrayList<Ship>();
-    private ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
-    private ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
+    private ArrayList<Ship> playerBullets = new ArrayList<Ship>();
+    private ArrayList<Ship> enemyBullets = new ArrayList<Ship>();
 
     private int enemyRows    = 3;
     private int enemyColumns = 5;
@@ -55,7 +64,7 @@ public class MainController {
 
         Platform.runLater(() -> {
                     setUpKeyListener();
-                    setUpBackground();
+                    //setUpBackground();
                     setUpPlayer();
                     setUpEnemy();
                     db.saveShips(enemyObjects, player, "test");
@@ -66,12 +75,13 @@ public class MainController {
     }
 
     private void setUpBackground() {
-        bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
-        bg2 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
-        bg1.relocate( 0, -bg1.getImage().getHeight() + gamePane.getHeight());
-        bg2.relocate(0, (-bg2.getImage().getHeight() * 2) + gamePane.getHeight());
+        bg1 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
+        bg2 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
+        bg1.relocate( 0, -bg1.getImage().getHeight() + backgroundPane1.getHeight());
+        //bg2.relocate(0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
 
-        gamePane.getChildren().add(bg1);
+        backgroundPane1.getChildren().add(bg1);
+        //backgroundPane2.getChildren().add(bg2);
         currentBG = bg1;
         nextBG = bg2;
     }
@@ -166,33 +176,50 @@ public class MainController {
         //System.out.println("in pause");
     }
 
-    private void detectCollision() {
+    private ArrayList<ArrayList<Ship>> detectCollision() {
         // check friendly collision
-    	Platform.runLater(() -> {
-	    	for (Bullet b : playerBullets) {
-	    		for (Ship s : enemyObjects) {
-	    			if (detectCollisionHelper(s, b)) {
-	    				
-	        			enemyObjects.remove(s);
-	        			playerBullets.remove(b);
-	    			}
-	    		}
-	    		if (detectOutOfBoundBullets(b)) {
-	    			playerBullets.remove(b);
-	    		}
-	    	}
-	    	});
+
+        ArrayList<Ship> enemiesToRemove = new ArrayList<>();
+        ArrayList<Ship> bulletsToRemove = new ArrayList<>();
+//        if (playerBullets.isEmpty() || enemyObjects.isEmpty()) {
+//            ArrayList<ArrayList<Ship>> toReturn = new ArrayList<ArrayList<Ship>>();
+//            toReturn.add(new ArrayList<>());
+//            toReturn.add(new ArrayList<>());
+//            return toReturn;
+//        }
+        for (Ship b : playerBullets) {
+            for (Ship s : enemyObjects) {
+                if (detectCollisionHelper(s, b)) {
+                    enemiesToRemove.add(s);
+                    bulletsToRemove.add(b);
+                }
+            }
+            if (detectOutOfBoundBullets(b)) {
+                bulletsToRemove.add(b);
+            }
+
+        }
+
+        ArrayList<ArrayList<Ship>> toReturn = new ArrayList<>();
+        toReturn.add(enemiesToRemove);
+        toReturn.add(bulletsToRemove);
+        return toReturn;
+
         // check enemy collision
     }
     
     private boolean detectCollisionHelper(Ship b, Ship s) {
+        if (s.getRect().getBoundsInParent().intersects(b.getRect().getBoundsInParent())) {
+            return true;
+        } return false;
+
     	
-    	if ((s.getXCord() >= b.getXCord() && s.getXCord() <= b.getXCord() + b.getXSize()) || (s.getXCord() + s.getXSize() >= b.getXCord() && s.getXCord() + s.getXSize() <= b.getXCord() + b.getXSize())) {
-    		if ((s.getYCord() >= b.getYCord() && s.getYCord() <= b.getYCord() + b.getYSize()) || (s.getYCord() + s.getYSize() >= b.getYCord() && s.getYCord() + s.getYSize() <= b.getYCord() + b.getYSize())) {
-    			return true;
-    		}
-		}
-    	return false;
+//    	if ((s.getXCord() >= b.getXCord() && s.getXCord() <= b.getXCord() + b.getXSize()) || (s.getXCord() + s.getXSize() >= b.getXCord() && s.getXCord() + s.getXSize() <= b.getXCord() + b.getXSize())) {
+//    		if ((s.getYCord() >= b.getYCord() && s.getYCord() <= b.getYCord() + b.getYSize()) || (s.getYCord() + s.getYSize() >= b.getYCord() && s.getYCord() + s.getYSize() <= b.getYCord() + b.getYSize())) {
+//    			return true;
+//    		}
+//		}
+//    	return false;
     }
     
     private boolean detectOutOfBoundBullets(Ship b) {
@@ -225,52 +252,61 @@ public class MainController {
             if (now - lastGameInterval >= interval) {
                 lastGameInterval = now;
                 
-                detectCollision();
-                gamePane.getChildren().clear();
+                Platform.runLater(() -> {
+                    ArrayList<ArrayList<Ship>> toRemove = detectCollision();
+                    enemyObjects.removeAll(toRemove.get(0));
+                    playerBullets.removeAll(toRemove.get(1));
+                    redraw();
+                });
                 
-                gamePane.getChildren().add(player.getRect());
-                player.update();
-                player.draw();
-                
-                for (Ship e : enemyObjects) {
-                	gamePane.getChildren().add(e.getRect());
-                	e.draw();
-                }
-                for (Ship s : playerBullets) {
-                	gamePane.getChildren().add(s.getRect());
-                	s.move();
-                	s.draw();
-                }
-                
-            } if (now - lastBGInterval >= bgInterval) {
+            } /*if (now - lastBGInterval >= bgInterval) {
                 lastBGInterval = now;
 
 
-                checkBG(bg1, bg2);
-                checkBG(bg2, bg1);
+                //checkBG();
                 //System.out.println("1 " + bg1.getLayoutY());
                 //System.out.println("2 " + bg2.getLayoutY());
-            }
+            }*/
         }
     }
 
-    private void checkBG(ImageView curr, ImageView next) { //BG = background
-      if (Double.compare(curr.getLayoutY(),0.0) > 0) {
-          if (gamePane.getChildren().contains(curr)) {
-              gamePane.getChildren().remove(curr);
-          }
-          next.relocate( 0, -next.getImage().getHeight() + gamePane.getHeight());
-          curr.relocate( 0, -curr.getImage().getHeight() + gamePane.getHeight());
+    private void redraw() {
+        gamePane.getChildren().clear();
 
-          if (!gamePane.getChildren().contains(next)) {
-              gamePane.getChildren().add(next);
-          }
-      }
-      if (Double.compare(curr.getLayoutY(), 0.0) <= 0) {
-          //System.out.println("hello " + curr.getLayoutY());
-          if (gamePane.getChildren().contains(curr)) {
-              curr.setLayoutY(curr.getLayoutY() + bgSpeed);
-          }
-      }
+
+        gamePane.getChildren().add(player.getRect());
+        player.update();
+        player.draw();
+
+        for (Ship e : enemyObjects) {
+            gamePane.getChildren().add(e.getRect());
+            e.draw();
+        }
+        for (Ship s : playerBullets) {
+            gamePane.getChildren().add(s.getRect());
+            s.move();
+            s.draw();
+        }
+
     }
+
+    private void checkBG() { //BG = background
+        if (Double.compare(bg1.getLayoutY(),0.0) > 0) {
+            bg2.relocate( 0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
+        }
+        else if (Double.compare(bg2.getLayoutY(),0.0) > 0) {
+            bg1.relocate( 0, -bg1.getImage().getHeight() + backgroundPane1.getHeight());
+
+        }
+        System.out.println("1 " + bg1.getLayoutY() + " " + backgroundPane1.getHeight());
+        System.out.println("2 " + bg2.getLayoutX() + " " + backgroundPane2.getHeight());
+
+        if (Double.compare(bg1.getLayoutY(), backgroundPane1.getHeight()) <= 0) {
+            bg1.setLayoutY(bg1.getLayoutY() + bgSpeed);
+        } if (Double.compare(bg2.getLayoutY(), backgroundPane2.getHeight()) <= 0) {
+            bg2.setLayoutY(bg2.getLayoutY() + bgSpeed);
+        }
+
+      }
 }
+

@@ -17,7 +17,7 @@
                   <Insets top="100.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="load" mnemonicParsing="false" prefHeight="27.0" prefWidth="158.0" text="Load">
+            <Button fx:id="load" mnemonicParsing="false" onAction="#load" prefHeight="27.0" prefWidth="158.0" text="Load">
                <VBox.margin>
                   <Insets top="100.0" />
                </VBox.margin>

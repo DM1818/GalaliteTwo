@@ -18,7 +18,7 @@ public class PlayerShip extends Ship {
 		xSize = ratioWidth;
 		xCord = screenWidth / 2.0;
 		yCord = screenHeight - (screenHeight / 10.0);
-		dx = xSize / 3;
+		dx = xSize;
 		firing = false;
 		dy = 0;
 		this.ship  = ship;
