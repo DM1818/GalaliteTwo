@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -38,6 +39,8 @@ public class MainController {
 
     @FXML
     private Pane gamePane;
+    @FXML
+    private Label livesLabel, scoreLabel, highscoreLabel;
 
     private ArrayList<Ship> enemyObjects = new ArrayList<Ship>();
     private ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
@@ -49,6 +52,8 @@ public class MainController {
     private Parent parent;
     
     private Database db = new Database();
+    private int lives = 3;
+    private int score = 0;
 
     @FXML
     private void initialize() {
@@ -58,14 +63,23 @@ public class MainController {
                     setUpBackground();
                     setUpPlayer();
                     setUpEnemy();
+                    setUpGameState();
                     db.saveShips(enemyObjects, player, "test");
                     db.getEnemyShips("test");
         });
         //System.out.println("Hello");
-
     }
 
-    private void setUpBackground() {
+    private void setUpGameState() {
+    	updateLives();
+    	updateScore();
+    	highscoreLabel.setText("Highscore: " + db.getHighscore());
+	}
+    
+    private void updateLives() {livesLabel.setText("Lives: " + lives);}
+    private void updateScore() {scoreLabel.setText("Score: " + score);}
+
+	private void setUpBackground() {
         bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
         bg2 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
         bg1.relocate( 0, -bg1.getImage().getHeight() + gamePane.getHeight());
