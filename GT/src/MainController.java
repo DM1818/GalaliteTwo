@@ -50,7 +50,7 @@ public class MainController {
     KeyCode currentKey;
 
     private long fps = 60L;
-    private long interval = 5000000000L / fps;
+    private long interval = 100000000L / fps;
     private ImageView bg1;
     private ImageView bg2;
 
@@ -72,6 +72,9 @@ public class MainController {
     private int enemyColumns = 5;
 
     private Parent parent;
+
+    private int count;
+    private int dir;
     
     private Database db = new Database();
     private int lives = 3;
@@ -79,7 +82,8 @@ public class MainController {
 
     @FXML
     private void initialize() {
-
+        count = 50;
+        dir = 1;
         Platform.runLater(() -> {
                     setUpKeyListener();
                     //setUpBackground();
@@ -87,6 +91,7 @@ public class MainController {
                     setUpEnemy();
                     setUpGameState();
         });
+
         //System.out.println("Hello");
     }
 
@@ -140,7 +145,8 @@ public class MainController {
 
                 switch (event.getCode()) {
                     case SPACE:
-                        player.fire(true);
+                        spawnPlayerBullet();
+                        score -= 5;
                         break;
                     case A:
                         currentKey = event.getCode();
@@ -164,7 +170,6 @@ public class MainController {
                 switch (event.getCode()) {
                     case SPACE:
                         //player.fire(false);
-                    	spawnPlayerBullet();
                         break;
                     case A:
                         if (currentKey == KeyCode.A) {
@@ -185,7 +190,7 @@ public class MainController {
     	if (playerBullets.size() < 2) {
     		Rectangle r = new Rectangle(5, 5);
     		gamePane.getChildren().add(r);
-    		Bullet bullet = new Bullet(r, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0, gamePane.getHeight() / -10);
+    		Bullet bullet = new Bullet(r, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0, - 20);
     		playerBullets.add(bullet);
     		bullet.draw();
     	}
@@ -205,7 +210,7 @@ public class MainController {
     		for (int i2 = 0; i2 < enemyRows; i2++) {
     			double xLength = ((gamePane.getWidth() * 0.5) / (enemyColumns * 2)); 
     			double yLength = ((gamePane.getHeight() * 0.5) / (enemyRows * 2));
-    			double xCord   = (xLength * 2) * i + (gamePane.getWidth() * 0.4);
+    			double xCord   = (xLength * 2) * i + (gamePane.getWidth() * 0.25);
     			double yCord   = (yLength * 2) * i2 + (gamePane.getHeight() * 0.1);
     			
     			Rectangle r = new Rectangle(5, 5);
@@ -216,9 +221,46 @@ public class MainController {
     		}
     	}
     }
-    
+    @FXML
     private void pause() {
+        clock.stop();
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(Main.getStage());
+        VBox dialogVbox = new VBox(20);
 
+
+        Button resume = new Button("Resume");
+        resume.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+                clock.start();
+            }
+        });
+
+        Button save = new Button("Save");
+        save.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // TODO database interaction here:
+                // these fields encapsulate the current game state:
+//                enemyBullets;
+//                enemyObjects; // just enemy ships
+//                player;
+//                playerBullets;
+//                // +
+//                score;
+//                lives;
+
+            }
+        });
+        dialogVbox.getChildren().add(resume);
+        dialogVbox.getChildren().add(save);
+
+        Scene dialogScene = new Scene(dialogVbox, 500, 300);
+        dialog.setScene(dialogScene);
+        dialog.show();
     }
 
 
@@ -235,9 +277,17 @@ public class MainController {
         Button b = new Button("Save Score");
         b.setOnAction((event) -> {
                 String name = tf.getText();
+<<<<<<< HEAD
                 db.insertHighscore(name, score);
                 dialog.close();
             });
+=======
+                System.out.println("hi");
+                // score = score
+                // TODO database interaction with score + name here
+            }
+        });
+>>>>>>> 5d297900cbf711bec0445a35f523da4a94fbebf6
 
         dialogVbox.getChildren().add(b);
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
@@ -249,7 +299,8 @@ public class MainController {
         // check friendly collision
 
         ArrayList<Ship> enemiesToRemove = new ArrayList<>();
-        ArrayList<Ship> bulletsToRemove = new ArrayList<>();
+        ArrayList<Ship> playerBulletsToRemove = new ArrayList<>();
+        ArrayList<Ship> enemyBulletsToRemove = new ArrayList<>();
 //        if (playerBullets.isEmpty() || enemyObjects.isEmpty()) {
 //            ArrayList<ArrayList<Ship>> toReturn = new ArrayList<ArrayList<Ship>>();
 //            toReturn.add(new ArrayList<>());
@@ -260,22 +311,44 @@ public class MainController {
             for (Ship s : enemyObjects) {
                 if (detectCollisionHelper(s, b)) {
                     enemiesToRemove.add(s);
-                    bulletsToRemove.add(b);
+                    playerBulletsToRemove.add(b);
                     score += 100;
                 }
             }
             if (detectOutOfBoundBullets(b)) {
-                bulletsToRemove.add(b);
+                playerBulletsToRemove.add(b);
             }
 
+        }
+        for (Ship b : enemyBullets) {
+            if (detectCollisionHelper(player,b)) {
+                takeDamage();
+                enemyBulletsToRemove.addAll(enemyBullets);
+            }
+            if (detectOutOfBoundBullets(b)) {
+                enemyBulletsToRemove.add(b);
+            }
         }
 
         ArrayList<ArrayList<Ship>> toReturn = new ArrayList<>();
         toReturn.add(enemiesToRemove);
-        toReturn.add(bulletsToRemove);
+        toReturn.add(playerBulletsToRemove);
+        toReturn.add(enemyBulletsToRemove);
         return toReturn;
 
         // check enemy collision
+    }
+
+    private void takeDamage() {
+        if (lives > 0) {
+            lives -= 1;
+
+            player.setXCord(gamePane.getWidth() / 2);
+        } else {
+            clock.stop();
+            // TODO game over popup
+        }
+
     }
     
     private boolean detectCollisionHelper(Ship b, Ship s) {
@@ -298,42 +371,77 @@ public class MainController {
     	}
     	return false;
     }
-    
+
     private void enemyFire(Ship e) {
-    	if (Math.random() * enemyObjects.size() * 5 <= 1) {
-    		spawnEnemyBullet(e);
-    	}
+        if (Math.random() * (enemyObjects.size() + enemyBullets.size()) * 8 <= 1) {
+            spawnEnemyBullet(e);
+            System.out.println(enemyBullets.size() + "  " + enemyObjects.size());
+        }
     }
-    
+
     private void spawnEnemyBullet(Ship e) {
-    	Rectangle r = new Rectangle();
-    	gamePane.getChildren().add(r);
-    	
-    	
-    	
-    	//Bullet bullet = new Bullet(r, 5, 12, e.getXCord() + (e.getXSize() / 2), e.getYCord() + e.getYSize(), )TODO
+        Rectangle r = new Rectangle();
+        gamePane.getChildren().add(r);
+
+        double xDis = player.getXCord() - e.getXCord();
+        double yDis = player.getYCord() - e.getYCord();
+        double dy = 10;
+        double dx = (dy / yDis) * xDis;
+
+        Bullet bullet = new Bullet(r, 5, 12, e.getXCord() + (e.getXSize() / 2), e.getYCord() + e.getYSize(), dx, dy);
+        enemyBullets.add(bullet);
+        bullet.draw();
     }
-    
+
+
+
     private class Movement extends AnimationTimer {
         private long lastGameInterval = 0;
         private long lastBGInterval = 0;
+        private long lastBulletInterval = 0;
+
+
         @Override
         public void handle(long now) {
-            if (now - lastGameInterval >= interval) {
+            if (now - lastGameInterval >= interval / 4) {
                 lastGameInterval = now;
 
                 
                 Platform.runLater(() -> {
-                    ArrayList<ArrayList<Ship>> toRemove = detectCollision();
-                    enemyObjects.removeAll(toRemove.get(0));
-                    playerBullets.removeAll(toRemove.get(1));
-                    redraw();
-                    updateScore();
-                    updateLives();
+                    gamePane.getChildren().clear();
+
+
+                    gamePane.getChildren().add(player.getRect());
+                    player.update();
+                    player.draw();
+                    for (Ship e : enemyObjects) {
+                        gamePane.getChildren().add(e.getRect());
+
+                        e.draw();
+                    }
+                    for (Ship s : playerBullets) {
+                        gamePane.getChildren().add(s.getRect());
+                        s.draw();
+                    }
+                    for (Ship e : enemyBullets) {
+                        if (!gamePane.getChildren().contains(e.getRect())) {
+                            gamePane.getChildren().add(e.getRect());
+                        }
+                        e.draw();
+                    }
+
                 });
 
                 
-            } /*if (now - lastBGInterval >= bgInterval) {
+            }
+            if (now - lastBulletInterval >= interval * 10) {
+                lastBulletInterval = now;
+                gamePane.getChildren().clear();
+                gamePane.getChildren().add(player.getRect());
+                player.draw();
+                handleInteractions();
+            }
+ /*if (now - lastBGInterval >= bgInterval) {
                 lastBGInterval = now;
 
 
@@ -344,22 +452,42 @@ public class MainController {
         }
     }
 
+    private void handleInteractions() {
+        ArrayList<ArrayList<Ship>> toRemove = detectCollision();
+        enemyObjects.removeAll(toRemove.get(0));
+        playerBullets.removeAll(toRemove.get(1));
+        enemyBullets.removeAll(toRemove.get(2));
+        redraw();
+        updateScore();
+        updateLives();
+    }
+
     private void redraw() {
-        gamePane.getChildren().clear();
 
-
-        gamePane.getChildren().add(player.getRect());
-        player.update();
-        player.draw();
+        if (count < 100) {
+            count++;
+        } else {
+            count = 0;
+            dir *= -1;
+        }
 
         for (Ship e : enemyObjects) {
             gamePane.getChildren().add(e.getRect());
+            enemyFire(e);
+            e.move(dir);
             e.draw();
         }
         for (Ship s : playerBullets) {
             gamePane.getChildren().add(s.getRect());
             s.move();
             s.draw();
+        }
+        for (Ship e : enemyBullets) {
+            if (!gamePane.getChildren().contains(e.getRect())) {
+                gamePane.getChildren().add(e.getRect());
+            }
+            e.move();
+            e.draw();
         }
 
     }

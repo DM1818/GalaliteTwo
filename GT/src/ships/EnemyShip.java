@@ -17,4 +17,8 @@ public class EnemyShip extends Ship {
 		this.ship.setFill(Color.RED);
 	}
 
+	@Override
+	public void move(int dir) {
+		xCord += dx * dir;
+	}
 }
