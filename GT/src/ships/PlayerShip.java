@@ -25,6 +25,23 @@ public class PlayerShip extends Ship {
 		ship.setFill(new ImagePattern(new Image("/assets/player.png",ratioWidth,ratioHeight,false,false)));
 
 	}
+	public PlayerShip(Rectangle ship, double screenWidth, double screenHeight, double xCord, double yCord) {
+		this.screenWidth = screenWidth;
+		double ratioWidth = screenWidth / 15.0;
+		double ratioHeight = screenHeight / 12.0;
+		this.screenHeight = screenHeight;
+		System.out.println(screenWidth);
+		ySize = ratioHeight;
+		xSize = ratioWidth;
+		this.xCord = xCord;
+		this.yCord = yCord;
+		dx = 3;
+		firing = false;
+		dy = 0;
+		this.ship  = ship;
+		ship.setFill(new ImagePattern(new Image("/assets/player.png",ratioWidth,ratioHeight,false,false)));
+
+	}
 
 	public void fire(boolean fire) {
 		firing = fire;

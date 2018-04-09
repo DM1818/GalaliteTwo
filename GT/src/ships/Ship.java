@@ -16,6 +16,9 @@ public class Ship {
 	double screenWidth;
 	int moving;
 
+	public double getScreenHeight() {return screenHeight;}
+	public double getScreenWidth() {return screenWidth;}
+
 	public double getXSize() {
 		return xSize;
 	}

@@ -99,7 +99,7 @@ public class Database {
 	}
 
 	// interacting with saveState_gameInfo
-	public void insertGameInfo(String name, int lives, int score, int level) {
+	public void insertGameInfo(String name, int lives, int score) {
 		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_gameInfo WHERE saveName='" + name + "';");
@@ -179,9 +179,10 @@ public class Database {
 						+ saveName + "', " + each.getXCord() + ", " + each.getYCord() + ", " + each.getXSize() + ", "
 						+ each.getYSize() + ", " + "'enemy'" + ");");
 			}
+			System.out.println("myShip: " + myShip.getScreenWidth());
 			stat.executeUpdate("INSERT INTO saveState_ships (saveName, x, y, xSize, ySize, type) VALUES " + "('"
-					+ saveName + "', " + myShip.getXCord() + ", " + myShip.getYCord() + ", " + myShip.getXSize() + ", "
-					+ myShip.getYSize() + ", " + "'me'" + ");");
+					+ saveName + "', " + myShip.getXCord() + ", " + myShip.getYCord() + ", " + myShip.getScreenWidth() + ", "
+					+ myShip.getScreenHeight() + ", " + "'me'" + ");");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			news = new BadNews("Couldn't save");
@@ -196,9 +197,10 @@ public class Database {
 			ResultSet results = stat.executeQuery(
 					"SELECT * FROM saveState_ships WHERE saveName='" + saveName + "' AND type = 'enemy';");
 			while (results.next()) {
-				Rectangle r = new Rectangle();
-				shipBuilder = new EnemyShip(r, results.getDouble(4), results.getDouble(5), results.getDouble(2),
+				Rectangle r = new Rectangle(5, 5);
+				shipBuilder = new EnemyShip(r, results.getDouble(5), results.getDouble(6), results.getDouble(2),
 						results.getDouble(3));
+				ships.add(shipBuilder);
 			}
 		} catch (SQLException e) {
 			news = new BadNews("Couldn't find enemy ships in save");
@@ -207,14 +209,15 @@ public class Database {
 		return ships;
 	}
 
-	public Ship getPlayerShip(String saveName) {
+	public PlayerShip getPlayerShip(String saveName) { //saveName, x (2), y (3), xSize (4), ySize (5), type
 		refresh();
-		Ship shipBuilder = null;
+		PlayerShip shipBuilder = null;
 		try {
 			ResultSet result = stat
 					.executeQuery("SELECT * FROM saveState_ships WHERE saveName='" + saveName + "' AND type = 'me';");
-			Rectangle r = new Rectangle();
-			shipBuilder = new EnemyShip(r, result.getDouble(4), result.getDouble(5), result.getDouble(2),
+			Rectangle r = new Rectangle(5, 5);	
+			//Rectangle ship, double screenWidth, double screenHeight, double xCord, double yCord
+			shipBuilder = new PlayerShip(r, result.getDouble(5), result.getDouble(6), result.getDouble(2),
 					result.getDouble(3));
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -224,18 +227,18 @@ public class Database {
 	}
 
 	//interacting with saveState_bullets
-	public void saveBullets(ArrayList<Bullet> enemyBullets, ArrayList<Bullet> playerBullets, String saveName) { // TODO
+	public void saveBullets(ArrayList<Ship> enemyBullets, ArrayList<Ship> playerBullets, String saveName) { // TODO
 		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_bullets WHERE saveName='" + saveName + "';");
-			for (Bullet each : enemyBullets) {
+			for (Ship each : enemyBullets) {
 				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy) VALUES " + "('" + saveName
-						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + each.getDX() + ", " + each.getDY()
+						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + ((Bullet) each).getDX() + ", " + ((Bullet) each).getDY()
 						+ ");");
 			}
-			for (Bullet each : playerBullets) {
+			for (Ship each : playerBullets) {
 				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy) VALUES " + "('" + saveName
-						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + each.getDX() + ", " + each.getDY()
+						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + ((Bullet) each).getDX() + ", " + ((Bullet) each).getDY()
 						+ ");");
 			}
 		} catch (SQLException e) {
