@@ -81,6 +81,7 @@ public class StartController {
 		db.insertHighscore("Fish", 1200);
 
 		highscoreList.setItems(db.getAllHighscores());
+
 		db.insertGameInfo("Best Save Ever", 99, 420, 69);
 		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
 
@@ -115,28 +116,10 @@ public class StartController {
 
 
 
-private void loadGameState(String s) {
+	private void loadGameState(String s) {
 
 	}
 
-//	@FXML
-//	private void resume() {
-//		changeScene("MainScreen.fxml");
-//
-//
-//	}
-
-
-
-//	@FXML
-//	private void pause() {
-//		System.out.println("in pause");
-//		System.out.println(state);
-//		System.out.println("yes");
-//		state = State.PAUSE;
-//		// TODO pause should be a popup
-//		changeScene("PauseScreen.fxml");
-//	}
 
 
 	private void changeScene(String fxml) {
