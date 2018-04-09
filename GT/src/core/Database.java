@@ -198,7 +198,7 @@ public class Database {
 					"SELECT * FROM saveState_ships WHERE saveName='" + saveName + "' AND type = 'enemy';");
 			while (results.next()) {
 				Rectangle r = new Rectangle(5, 5);
-				shipBuilder = new EnemyShip(r, results.getDouble(5), results.getDouble(6), results.getDouble(2),
+				shipBuilder = new EnemyShip(r, results.getDouble(4), results.getDouble(5), results.getDouble(2),
 						results.getDouble(3));
 				ships.add(shipBuilder);
 			}
@@ -217,7 +217,7 @@ public class Database {
 					.executeQuery("SELECT * FROM saveState_ships WHERE saveName='" + saveName + "' AND type = 'me';");
 			Rectangle r = new Rectangle(5, 5);	
 			//Rectangle ship, double screenWidth, double screenHeight, double xCord, double yCord
-			shipBuilder = new PlayerShip(r, result.getDouble(5), result.getDouble(6), result.getDouble(2),
+			shipBuilder = new PlayerShip(r, result.getDouble(4), result.getDouble(5), result.getDouble(2),
 					result.getDouble(3));
 		} catch (SQLException e) {
 			e.printStackTrace();
