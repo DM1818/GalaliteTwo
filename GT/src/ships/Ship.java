@@ -43,9 +43,11 @@ public class Ship {
 
 	public void move(int dir) {
 		moving = dir;
-//		xCord += (dx * dir);
-//		yCord += (dy * dir);
-//		System.out.println(xCord);
+	}
+	
+	public void move() {
+		xCord += dx;
+		yCord += dy;
 	}
 
 	public void stop() {
@@ -60,7 +62,12 @@ public class Ship {
 		ship.setVisible(true);
 	}
 
-
+	public void draw() {
+		ship.setWidth(xSize);
+		ship.setHeight(ySize);
+		ship.setTranslateX(xCord);
+		ship.setTranslateY(yCord);
+	}
 
 }
 

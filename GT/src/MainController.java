@@ -9,6 +9,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import ships.Bullet;
+import ships.EnemyShip;
 import ships.PlayerShip;
 import ships.Ship;
 
@@ -36,8 +38,11 @@ public class MainController {
     private Pane gamePane;
 
     private ArrayList<Ship> friendlyObjects;
-    private ArrayList<Ship> enemyObjects;
+    private ArrayList<Ship> enemyObjects = new ArrayList<Ship>();
+    private ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
 
+    private int enemyRows    = 3;
+    private int enemyColumns = 5;
 
     private Parent parent;
 
@@ -48,9 +53,10 @@ public class MainController {
                     setUpKeyListener();
                     setUpBackground();
                     setUpPlayer();
+                    setUpEnemy();
 
         });
-        System.out.println("Hello");
+        //System.out.println("Hello");
 
     }
 
@@ -96,7 +102,8 @@ public class MainController {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case SPACE:
-                        player.fire(false);
+                        //player.fire(false);
+                    	spawnPlayerBullet();
                         break;
                     case A:
                         if (currentKey == KeyCode.A) {
@@ -112,6 +119,16 @@ public class MainController {
             }
         });
     }
+    
+    private void spawnPlayerBullet() {
+    	if (playerBullets.size() < 2) {
+    		Rectangle r = new Rectangle(5, 5);
+    		gamePane.getChildren().add(r);
+    		Bullet bullet = new Bullet(r, gamePane, 5, 12, player.getXCord() + (player.getXSize() / 2), player.getYCord(), 0, gamePane.getHeight() / -10);
+    		playerBullets.add(bullet);
+    		bullet.draw();
+    	}
+    }
 
     private void setUpPlayer() {
         clock = new Movement();
@@ -122,18 +139,63 @@ public class MainController {
         player.draw();
     }
 
-
+    private void setUpEnemy() {
+    	for (int i = 0; i < enemyColumns; i++) {
+    		for (int i2 = 0; i2 < enemyRows; i2++) {
+    			double xLength = ((gamePane.getWidth() * 0.5) / (enemyColumns * 2)); 
+    			double yLength = ((gamePane.getHeight() * 0.5) / (enemyRows * 2));
+    			double xCord   = (xLength * 2) * i + (gamePane.getWidth() * 0.4);
+    			double yCord   = (yLength * 2) * i2 + (gamePane.getHeight() * 0.1);
+    			
+    			Rectangle r = new Rectangle(5, 5);
+    			gamePane.getChildren().add(r);
+    			EnemyShip baddy = new EnemyShip(r, gamePane, xLength, yLength, xCord, yCord);
+    			enemyObjects.add(baddy);
+    			baddy.draw();
+    		}
+    	}
+    }
+    
     private void pause() {
         // launch a popup new scene
-        System.out.println("in pause");
+        //System.out.println("in pause");
     }
 
     private void detectCollision() {
         // check friendly collision
-
+    	for (Bullet b : playerBullets) {
+    		for (Ship s : enemyObjects) {
+    			if (detectCollisionHelper(s, b)) {
+    				s.setInvisible();
+        			b.setInvisible();
+        			enemyObjects.remove(s);
+        			playerBullets.remove(b);
+    			}
+    		}
+    		if (detectOutOfBoundBullets(b)) {
+    			playerBullets.remove(b);
+    		}
+    	}
         // check enemy collision
     }
-
+    
+    private boolean detectCollisionHelper(Ship b, Ship s) {
+    	
+    	if ((s.getXCord() >= b.getXCord() && s.getXCord() <= b.getXCord() + b.getXSize()) || (s.getXCord() + s.getXSize() >= b.getXCord() && s.getXCord() + s.getXSize() <= b.getXCord() + b.getXSize())) {
+    		if ((s.getYCord() >= b.getYCord() && s.getYCord() <= b.getYCord() + b.getYSize()) || (s.getYCord() + s.getYSize() >= b.getYCord() && s.getYCord() + s.getYSize() <= b.getYCord() + b.getYSize())) {
+    			return true;
+    		}
+		}
+    	return false;
+    }
+    
+    private boolean detectOutOfBoundBullets(Ship b) {
+    	if (b.getXCord() < 0 || b.getYCord() < 0 || b.getXCord() > gamePane.getWidth() || b.getYCord() > gamePane.getHeight()) {
+    		return true;
+    	}
+    	return false;
+    }
+    
     private class Movement extends AnimationTimer {
         private long lastGameInterval = 0;
         private long lastBGInterval = 0;
@@ -143,6 +205,12 @@ public class MainController {
                 lastGameInterval = now;
                 player.update();
                 player.draw();
+                
+                for (Ship s : playerBullets) {
+                	s.move();
+                	s.draw();
+                }
+                
                 detectCollision();
             } if (now - lastBGInterval >= bgInterval) {
                 lastBGInterval = now;
@@ -150,13 +218,13 @@ public class MainController {
 
                 checkBG(bg1, bg2);
                 checkBG(bg2, bg1);
-                System.out.println("1 " + bg1.getLayoutY());
-                System.out.println("2 " + bg2.getLayoutY());
+                //System.out.println("1 " + bg1.getLayoutY());
+                //System.out.println("2 " + bg2.getLayoutY());
             }
         }
     }
 
-    private void checkBG(ImageView curr, ImageView next) {
+    private void checkBG(ImageView curr, ImageView next) { //BG = background
       if (Double.compare(curr.getLayoutY(),0.0) > 0) {
           if (gamePane.getChildren().contains(curr)) {
               gamePane.getChildren().remove(curr);
@@ -169,7 +237,7 @@ public class MainController {
           }
       }
       if (Double.compare(curr.getLayoutY(), 0.0) <= 0) {
-          System.out.println("hello " + curr.getLayoutY());
+          //System.out.println("hello " + curr.getLayoutY());
           if (gamePane.getChildren().contains(curr)) {
               curr.setLayoutY(curr.getLayoutY() + bgSpeed);
           }

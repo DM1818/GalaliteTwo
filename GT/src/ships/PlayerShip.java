@@ -31,13 +31,6 @@ public class PlayerShip extends Ship {
 		firing = fire;
 	}
 
-	public void draw() {
-		ship.setWidth(xSize);
-		ship.setHeight(ySize);
-		ship.setTranslateX(xCord);
-		ship.setTranslateY(yCord);
-	}
-
 	public void update() {
 		xCord += (dx * moving);
 	}
