@@ -70,8 +70,8 @@ public class StartController {
 		highscoreList.setItems(db.getAllHighscores());
 
 
-		db.insertGameInfo("Best Save Ever", 99, 420, 69);
-		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
+//		db.insertGameInfo("Best Save Ever", 99, 420, 69);
+//		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
 
 
 	}

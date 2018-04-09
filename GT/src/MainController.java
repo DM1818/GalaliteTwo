@@ -23,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ships.Bullet;
 import ships.EnemyShip;
 import ships.PlayerShip;
@@ -228,6 +229,19 @@ public class MainController {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(Main.getStage());
         VBox dialogVbox = new VBox(20);
+        dialog.setOnHiding(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        clock.start();
+                    }
+                });
+            }
+        });
 
 
         Button resume = new Button("Resume");
@@ -276,15 +290,13 @@ public class MainController {
 
         Button b = new Button("Save Score");
         b.setOnAction((event) -> {
-                String name = tf.getText();
-                db.insertHighscore(name, score);
-                dialog.close();
-            });
-                System.out.println("hi");
-                // score = score
-                // TODO database interaction with score + name here
-            }
-        });
+                    String name = tf.getText();
+                    db.insertHighscore(name, score);
+                    dialog.close();
+                    System.out.println("hi");
+                    // score = score
+                    // TODO database interaction with score + name here
+                });
 
         dialogVbox.getChildren().add(b);
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
