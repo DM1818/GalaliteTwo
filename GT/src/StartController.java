@@ -79,10 +79,10 @@ public class StartController {
 		stage = Main.getStage();
 
 		db.insertHighscore("Fish", 1200);
-		db.insertHighscore("Anna", 400000);
-		db.insertHighscore("Jacob", 420);
 
 		highscoreList.setItems(db.getAllHighscores());
+		db.insertGameInfo("Best Save Ever", 99, 420, 69);
+		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
 
 	}
 
@@ -107,10 +107,17 @@ public class StartController {
 		                    null,
 		                    options,
 		                    null);
+		if (s != null) {
+			loadGameState(s);
+		}
 	}
 
 
 
+
+private void loadGameState(String s) {
+
+	}
 
 //	@FXML
 //	private void resume() {
