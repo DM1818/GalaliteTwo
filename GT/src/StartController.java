@@ -67,10 +67,7 @@ public class StartController {
 
 	public void initialize() {
 		stage = Main.getStage();
-
-
 		highscoreList.setItems(db.getAllHighscores());
-
 	}
 
 	@FXML

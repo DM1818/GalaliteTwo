@@ -35,8 +35,11 @@ public class Database {
 	}
 
 	private void refresh() {
-
+		
 		try {
+			if (stat != null) {
+				stat.close();
+			}
 			Class.forName("org.sqlite.JDBC");
 			Connection con = DriverManager.getConnection("jdbc:sqlite:Galalite");
 			stat = con.createStatement();
@@ -44,11 +47,11 @@ public class Database {
 			news = new BadNews("Couldn't connect to the database");
 			e.printStackTrace();
 		}
-
 	}
 
 	// interacting with the highscore table
 	public void insertHighscore(String name, int score) {
+		refresh();
 		try {
 			stat.executeUpdate("INSERT INTO highscores (name, score) VALUES ('" + name + "', " + score + ");");
 
@@ -97,6 +100,7 @@ public class Database {
 
 	// interacting with saveState_gameInfo
 	public void insertGameInfo(String name, int lives, int score, int level) {
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_gameInfo WHERE saveName='" + name + "';");
 			stat.executeUpdate("INSERT INTO saveState_gameInfo (saveName, lives, score, active) VALUES ('" + name + "', "
@@ -127,7 +131,7 @@ public class Database {
 	public void setActiveLoad(String saveName) {
 		refresh();
 		try { 
-			stat.executeUpdate("UPDATE saveState_gameInfo SET active=0 WHERE saveName='" + saveName +"';");	
+			stat.executeUpdate("UPDATE saveState_gameInfo SET active=1 WHERE saveName='" + saveName +"';");	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			news = new BadNews("Sorry: You can't set that load");
@@ -138,8 +142,11 @@ public class Database {
 		refresh();
 		String gameName = "";
 		try {
-			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo WHERE active=0;");
-			gameName = results.getString(1);
+			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo WHERE active=1;");
+			if (!results.isClosed()) {
+				gameName = results.getString(1);
+			}
+			System.out.println(gameName);
 			stat.executeUpdate("UPDATE saveState_gameInfo SET active=0 WHERE saveName='" + gameName +"';");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -164,6 +171,7 @@ public class Database {
 
 	//interacting with saveState_ships
 	public void saveShips(ArrayList<Ship> enemyShips, PlayerShip myShip, String saveName) {
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_ships WHERE saveName='" + saveName + "';");
 			for (Ship each : enemyShips) {
@@ -181,7 +189,7 @@ public class Database {
 	}
 
 	public ArrayList<Ship> getEnemyShips(String saveName) { // Player Ship in last
-
+		refresh();
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		Ship shipBuilder;
 		try {
@@ -217,6 +225,7 @@ public class Database {
 
 	//interacting with saveState_bullets
 	public void saveBullets(ArrayList<Bullet> enemyBullets, ArrayList<Bullet> playerBullets, String saveName) { // TODO
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_bullets WHERE saveName='" + saveName + "';");
 			for (Bullet each : enemyBullets) {

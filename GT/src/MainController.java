@@ -5,20 +5,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-<<<<<<< HEAD
-//<<<<<<< HEAD
+
 import javafx.scene.image.Image;
-//=======
 import javafx.scene.control.Label;
-//>>>>>>> origin/master
-=======
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
 import javafx.scene.control.Label;
 
->>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -95,9 +90,7 @@ public class MainController {
         //System.out.println("Hello");
     }
 
-<<<<<<< HEAD
 
-=======
 //<<<<<<< HEAD
 //    private void setUpBackground() {
 //        bg1 = new ImageView( getClass().getResource( "/assets/large_vertical_bg.png").toExternalForm());
@@ -105,10 +98,10 @@ public class MainController {
 //        bg1.relocate( 0, -bg1.getImage().getHeight() + backgroundPane1.getHeight());
 //        //bg2.relocate(0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
 //=======
->>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
     private void setUpGameState() {
     	String loading = db.getActiveLoad();
     	if (!loading.equals("")) {
+    		System.out.println("loading...");
     		loadGame(loading);
     	}
     	updateLives();
@@ -125,9 +118,7 @@ public class MainController {
 	private void updateLives() {livesLabel.setText("Lives: " + lives);}
     private void updateScore() {scoreLabel.setText("Score: " + score);}
 
-<<<<<<< HEAD
 
-=======
 	private void setUpBackground() {
         bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
         bg2 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
@@ -140,7 +131,6 @@ public class MainController {
         currentBG = bg1;
         nextBG = bg2;
     }
->>>>>>> 48bdf6c398f50a3386832998685ec4f137fc6110
 
     private void setUpKeyListener() {
         this.scene = Main.getScene();
@@ -243,17 +233,13 @@ public class MainController {
         dialogVbox.getChildren().add(tf);
 
         Button b = new Button("Save Score");
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        b.setOnAction((event) -> {
                 String name = tf.getText();
+                db.insertHighscore(name, score);
+                dialog.close();
+            });
 
-                // score = score
-                // TODO database interaction with score + name here
-            }
-        });
-
-        dialogVbox.getChildren().add(new Button("Save Score"));
+        dialogVbox.getChildren().add(b);
         Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
