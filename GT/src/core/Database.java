@@ -22,12 +22,12 @@ public class Database {
 	public Database() {
 		try {
 			refresh();
-			stat.executeUpdate("CREATE TABLE IF NOT EXISTS highscores (name String, score int)");
+			stat.executeUpdate("CREATE TABLE IF NOT EXISTS highscores (name String, score int);");
 			stat.executeUpdate(
-					"CREATE TABLE IF NOT EXISTS saveState_ships (saveName String, x int, y int, xSize int, ySize int, type String)");
+					"CREATE TABLE IF NOT EXISTS saveState_ships (saveName String, x int, y int, xSize int, ySize int, type String);");
 			stat.executeUpdate(
-					"CREATE TABLE IF NOT EXISTS saveState_bullets (saveName String, x int, y int, dx int, dy int)");
-			stat.executeUpdate("CREATE TABLE IF NOT EXISTS saveState_gameInfo (saveName String, lives int, score int)");
+					"CREATE TABLE IF NOT EXISTS saveState_bullets (saveName String, x int, y int, dx int, dy int);");
+			stat.executeUpdate("CREATE TABLE IF NOT EXISTS saveState_gameInfo (saveName String, lives int, score int, active int);");
 		} catch (Exception e) {
 			e.printStackTrace();
 			news = new BadNews("Could not access/create databases");
@@ -35,8 +35,11 @@ public class Database {
 	}
 
 	private void refresh() {
-
+		
 		try {
+			if (stat != null) {
+				stat.close();
+			}
 			Class.forName("org.sqlite.JDBC");
 			Connection con = DriverManager.getConnection("jdbc:sqlite:Galalite");
 			stat = con.createStatement();
@@ -44,11 +47,11 @@ public class Database {
 			news = new BadNews("Couldn't connect to the database");
 			e.printStackTrace();
 		}
-
 	}
 
 	// interacting with the highscore table
 	public void insertHighscore(String name, int score) {
+		refresh();
 		try {
 			stat.executeUpdate("INSERT INTO highscores (name, score) VALUES ('" + name + "', " + score + ");");
 
@@ -64,7 +67,7 @@ public class Database {
 		scores.add("Highscores: ");
 		try {
 			StringBuilder temp = new StringBuilder();
-			ResultSet info = stat.executeQuery("SELECT name, score FROM highscores ORDER BY score DESC");
+			ResultSet info = stat.executeQuery("SELECT name, score FROM highscores ORDER BY score DESC;");
 			while (info.next()) {
 				temp.append(info.getString("name"));
 				temp.append(": ");
@@ -84,7 +87,7 @@ public class Database {
 		refresh();
 		int score = 0;
 		try {
-			ResultSet middleMan = stat.executeQuery("SELECT MAX(score) FROM highscores");
+			ResultSet middleMan = stat.executeQuery("SELECT MAX(score) FROM highscores;");
 			score = middleMan.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -97,10 +100,11 @@ public class Database {
 
 	// interacting with saveState_gameInfo
 	public void insertGameInfo(String name, int lives, int score, int level) {
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_gameInfo WHERE saveName='" + name + "';");
-			stat.executeUpdate("INSERT INTO saveState_gameInfo (saveName, lives, score) VALUES ('" + name + "', "
-					+ lives + ", " + score + ");");
+			stat.executeUpdate("INSERT INTO saveState_gameInfo (saveName, lives, score, active) VALUES ('" + name + "', "
+					+ lives + ", " + score + ", 0);");
 
 		} catch (SQLException e) {
 			news = new BadNews("Couldn't insert game info");
@@ -124,9 +128,50 @@ public class Database {
 		return names;
 	}
 	
+	public void setActiveLoad(String saveName) {
+		refresh();
+		try { 
+			stat.executeUpdate("UPDATE saveState_gameInfo SET active=1 WHERE saveName='" + saveName +"';");	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			news = new BadNews("Sorry: You can't set that load");
+		}
+	}
+	
+	public String getActiveLoad() {
+		refresh();
+		String gameName = "";
+		try {
+			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo WHERE active=1;");
+			if (!results.isClosed()) {
+				gameName = results.getString(1);
+			}
+			System.out.println(gameName);
+			stat.executeUpdate("UPDATE saveState_gameInfo SET active=0 WHERE saveName='" + gameName +"';");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			news = new BadNews("Sorry: You can't get that load");
+		}
+		return gameName;
+	}
+	
+	public int getAspectofGameState(String name, String what) {
+		refresh();
+		int returning = 0;
+		try {
+			ResultSet results = stat.executeQuery("SELECT "+ what+ " FROM saveState_gameInfo WHERE saveName='" + name + "';");
+			returning = results.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			news = new BadNews("Sorry: You can't get your lives");
+		}
+		return returning;
+	}
+	
 
 	//interacting with saveState_ships
 	public void saveShips(ArrayList<Ship> enemyShips, PlayerShip myShip, String saveName) {
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_ships WHERE saveName='" + saveName + "';");
 			for (Ship each : enemyShips) {
@@ -144,7 +189,7 @@ public class Database {
 	}
 
 	public ArrayList<Ship> getEnemyShips(String saveName) { // Player Ship in last
-
+		refresh();
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		Ship shipBuilder;
 		try {
@@ -180,6 +225,7 @@ public class Database {
 
 	//interacting with saveState_bullets
 	public void saveBullets(ArrayList<Bullet> enemyBullets, ArrayList<Bullet> playerBullets, String saveName) { // TODO
+		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_bullets WHERE saveName='" + saveName + "';");
 			for (Bullet each : enemyBullets) {

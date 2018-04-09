@@ -5,6 +5,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.image.Image;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -87,12 +90,11 @@ public class MainController {
                     setUpPlayer();
                     setUpEnemy();
                     setUpGameState();
-                    db.saveShips(enemyObjects, player, "test");
-                    db.getEnemyShips("test");
         });
 
         //System.out.println("Hello");
     }
+
 
 //<<<<<<< HEAD
 //    private void setUpBackground() {
@@ -102,13 +104,25 @@ public class MainController {
 //        //bg2.relocate(0, -bg2.getImage().getHeight() + backgroundPane2.getHeight());
 //=======
     private void setUpGameState() {
+    	String loading = db.getActiveLoad();
+    	if (!loading.equals("")) {
+    		System.out.println("loading...");
+    		loadGame(loading);
+    	}
     	updateLives();
     	updateScore();
     	highscoreLabel.setText("Highscore: " + db.getHighscore());
 	}
     
-    private void updateLives() {livesLabel.setText("Lives: " + lives);}
+    private void loadGame(String loading) {
+    	lives = db.getAspectofGameState(loading, "lives");
+    	score = db.getAspectofGameState(loading, "score");
+	}
+
+
+	private void updateLives() {livesLabel.setText("Lives: " + lives);}
     private void updateScore() {scoreLabel.setText("Score: " + score);}
+
 
 	private void setUpBackground() {
         bg1 = new ImageView( getClass().getResource( "/assets/larger_bg2.png").toExternalForm());
@@ -261,10 +275,11 @@ public class MainController {
         dialogVbox.getChildren().add(tf);
 
         Button b = new Button("Save Score");
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        b.setOnAction((event) -> {
                 String name = tf.getText();
+                db.insertHighscore(name, score);
+                dialog.close();
+            });
                 System.out.println("hi");
                 // score = score
                 // TODO database interaction with score + name here

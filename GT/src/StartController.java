@@ -35,9 +35,6 @@ public class StartController {
 
 	private Stage stage;
 
-	private Scene scene;
-
-
 	@FXML
 	private Pane gamePane;
 
@@ -68,22 +65,14 @@ public class StartController {
 	Database db = new Database();
 
 
-
-
-	private long fps = 60L;
-	private long interval = 1000000000L / fps;
-
-
-
 	public void initialize() {
 		stage = Main.getStage();
-
-		db.insertHighscore("Fish", 1200);
-
 		highscoreList.setItems(db.getAllHighscores());
+
 
 		db.insertGameInfo("Best Save Ever", 99, 420, 69);
 		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
+
 
 	}
 
@@ -116,8 +105,10 @@ public class StartController {
 
 
 
-	private void loadGameState(String s) {
 
+	private void loadGameState(String s) {
+		db.setActiveLoad(s);
+		toMainScreen();
 	}
 
 
