@@ -68,17 +68,6 @@ public class StartController {
 	public void initialize() {
 		stage = Main.getStage();
 		highscoreList.setItems(db.getAllHighscores());
-
-
-<<<<<<< HEAD
-		db.insertGameInfo("Best Save Ever", 99, 420);
-		db.insertGameInfo("2nd Best Save Ever", 99, 420);
-=======
-//		db.insertGameInfo("Best Save Ever", 99, 420, 69);
-//		db.insertGameInfo("2nd Best Save Ever", 99, 420, 69);
->>>>>>> 2cb2bcb847d96291c66c9860ec0cf97bc81d8226
-
-
 	}
 
 	@FXML
