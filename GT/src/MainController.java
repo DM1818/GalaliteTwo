@@ -92,6 +92,7 @@ public class MainController {
 			setUpPlayer();
 			setUpEnemy();
 			setUpKeyListener();
+			gamePane.requestFocus();
 			
 		});
 
