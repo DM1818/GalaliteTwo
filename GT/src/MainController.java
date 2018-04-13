@@ -62,7 +62,7 @@ public class MainController {
 	private long bgInterval = 100000L / fps;
 
 	@FXML
-	private Pane gamePane;
+	public Pane gamePane;
 	@FXML
 	private Label livesLabel, scoreLabel, highscoreLabel;
 
@@ -386,7 +386,7 @@ private void saveHighScore() {
 
 	}
 
-	private boolean detectCollisionHelper(Ship b, Ship s) {
+	public boolean detectCollisionHelper(Ship b, Ship s) {
 		if (s.getRect().getBoundsInParent().intersects(b.getRect().getBoundsInParent())) {
 			return true;
 		}
@@ -404,7 +404,7 @@ private void saveHighScore() {
 		// return false;
 	}
 
-	private boolean detectOutOfBoundBullets(Ship b) {
+	public boolean detectOutOfBoundBullets(Ship b) {
 		if (b.getXCord() < 0 || b.getYCord() < 0 || b.getXCord() > gamePane.getWidth()
 				|| b.getYCord() > gamePane.getHeight()) {
 			return true;

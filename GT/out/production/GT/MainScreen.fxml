@@ -52,7 +52,6 @@
                         </VBox>
                      </children>
                   </Pane>
-                  <Button mnemonicParsing="false" onAction="#saveHighScore" text="Save High Score" />
                   <Button layoutX="21.0" layoutY="361.0" mnemonicParsing="false" onAction="#pause" text="pause" />
                </children>
                <opaqueInsets>

@@ -52,7 +52,13 @@
                         </VBox>
                      </children>
                   </Pane>
-                  <Button layoutX="21.0" layoutY="361.0" mnemonicParsing="false" onAction="#pause" text="pause" />
+                  <Button layoutX="21.0" layoutY="361.0" mnemonicParsing="false" onAction="#pause" style="-fx-background-color: white; -fx-border-color: black;" text="pause" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets left="130.0" top="50.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font></Button>
                </children>
                <opaqueInsets>
                   <Insets />
