@@ -62,7 +62,7 @@ public class StartController {
 
 
 
-	Database db = new Database();
+	static Database db = new Database();
 
 
 	public void initialize() {

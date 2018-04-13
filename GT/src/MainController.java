@@ -78,9 +78,10 @@ public class MainController {
 	private int count;
 	private int dir;
 
-	private Database db = new Database();
 	private int lives = 3;
 	private int score = 0;
+	
+	
 
 	@FXML
 	private void initialize() {
@@ -97,9 +98,9 @@ public class MainController {
 		// System.out.println("Hello");
 	}
 	private void setUpGameState() {
-		String loading = db.getActiveLoad();
+		System.out.println("loading...");
+		String loading = StartController.db.getActiveLoad();
 		if (!loading.equals("")) {
-			System.out.println("loading...");
 			loadGame(loading);
 			Platform.runLater(() -> {
 				pause();
@@ -107,18 +108,30 @@ public class MainController {
 		}
 		updateLives();
 		updateScore();
-		highscoreLabel.setText("Highscore: " + db.getHighscore());
+		highscoreLabel.setText("Highscore: " + StartController.db.getHighscore());
 		
 	}
 
 	private void loadGame(String loading) {
-		lives = db.getAspectofGameState(loading, "lives");
-		score = db.getAspectofGameState(loading, "score");
-		enemyObjects = db.getEnemyShips(loading);
-		player = db.getPlayerShip(loading);
-		
+		lives = StartController.db.getAspectofGameState(loading, "lives");
+		score = StartController.db.getAspectofGameState(loading, "score");
+		enemyObjects = StartController.db.getEnemyShips(loading);
+		player = StartController.db.getPlayerShip(loading);
+		loadBullets(loading);
 	}
 
+	private void loadBullets(String loadName) {
+		ArrayList<Bullet> loadingBullets = StartController.db.getEnemyBullets(loadName);
+		for (Bullet each : loadingBullets) {
+			enemyBullets.add(each);
+			each.draw();
+		}
+		loadingBullets = StartController.db.getMyBullets(loadName);
+		for (Bullet each : loadingBullets) {
+			playerBullets.add(each);
+			each.draw();
+		}
+	}
 	private void updateLives() {
 		livesLabel.setText("Lives: " + lives);
 	}
@@ -269,9 +282,9 @@ public class MainController {
 			@Override
 			public void handle(ActionEvent event) {
 				String saveName = tf.getText();
-				db.saveShips(enemyObjects, player, saveName);
-				db.saveBullets(enemyBullets, playerBullets, saveName);
-				db.insertGameInfo(saveName, lives, score);
+				StartController.db.saveShips(enemyObjects, player, saveName);
+				StartController.db.saveBullets(enemyBullets, playerBullets, saveName);
+				StartController.db.insertGameInfo(saveName, lives, score);
 			}
 		});
 		dialogVbox.getChildren().add(save);
@@ -302,7 +315,7 @@ private void saveHighScore() {
       Button b = new Button("Save Score");
       b.setOnAction((event) -> {
          String name = tf.getText();
-         db.insertHighscore(name, score);
+         StartController.db.insertHighscore(name, score);
          dialog.close();
       });
       Button menu = new Button("Exit to Menu");

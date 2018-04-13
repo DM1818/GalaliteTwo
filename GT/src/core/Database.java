@@ -18,15 +18,18 @@ import ships.Ship;
 public class Database {
 	private Statement stat;
 	private BadNews news;
+	private Connection con;
 
 	public Database() {
 		try {
-			refresh();
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:GalaliteTwo");
+			stat = con.createStatement();
 			stat.executeUpdate("CREATE TABLE IF NOT EXISTS highscores (name String, score int);");
 			stat.executeUpdate(
 					"CREATE TABLE IF NOT EXISTS saveState_ships (saveName String, x int, y int, xSize int, ySize int, type String);");
 			stat.executeUpdate(
-					"CREATE TABLE IF NOT EXISTS saveState_bullets (saveName String, x int, y int, dx int, dy int);");
+					"CREATE TABLE IF NOT EXISTS saveState_bullets (saveName String, x int, y int, dx int, dy int, type String);");
 			stat.executeUpdate("CREATE TABLE IF NOT EXISTS saveState_gameInfo (saveName String, lives int, score int, active int);");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,24 +37,9 @@ public class Database {
 		}
 	}
 
-	private void refresh() {
-		
-		try {
-			if (stat != null) {
-				stat.close();
-			}
-			Class.forName("org.sqlite.JDBC");
-			Connection con = DriverManager.getConnection("jdbc:sqlite:GalaliteTwo");
-			stat = con.createStatement();
-		} catch (ClassNotFoundException | SQLException e) {
-			news = new BadNews("Couldn't connect to the database");
-			e.printStackTrace();
-		}
-	}
 
 	// interacting with the highscore table
 	public void insertHighscore(String name, int score) {
-		refresh();
 		try {
 			stat.executeUpdate("INSERT INTO highscores (name, score) VALUES ('" + name + "', " + score + ");");
 
@@ -62,7 +50,8 @@ public class Database {
 	}
 
 	public ObservableList<String> getAllHighscores() {
-		refresh();
+		System.out.println("Getting all highscores");
+
 		ObservableList<String> scores = FXCollections.observableArrayList();
 		scores.add("Highscores: ");
 		try {
@@ -84,7 +73,8 @@ public class Database {
 	}
 
 	public String getHighscore() {
-		refresh();
+		System.out.println("Get game highscore");
+
 		int score = 0;
 		try {
 			ResultSet middleMan = stat.executeQuery("SELECT MAX(score) FROM highscores;");
@@ -100,7 +90,8 @@ public class Database {
 
 	// interacting with saveState_gameInfo
 	public void insertGameInfo(String name, int lives, int score) {
-		refresh();
+		System.out.println("Insert game infor");
+
 		try {
 			stat.executeUpdate("DELETE FROM saveState_gameInfo WHERE saveName='" + name + "';");
 			stat.executeUpdate("INSERT INTO saveState_gameInfo (saveName, lives, score, active) VALUES ('" + name + "', "
@@ -113,7 +104,8 @@ public class Database {
 	}
 
 	public ArrayList<String> getSaveNames() {
-		refresh();
+		System.out.println("Get save names");
+
 		ArrayList<String> names = new ArrayList<String>();
 		try {
 			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo;");
@@ -128,8 +120,10 @@ public class Database {
 		return names;
 	}
 	
-	public void setActiveLoad(String saveName) {
-		refresh();
+	public void setActiveLoad(String saveName) { //TODO PROBLEM CHILD
+		System.out.println("Set active load");
+		System.out.println("UPDATE saveState_gameInfo SET active=1 WHERE saveName='" + saveName +"';");
+
 		try { 
 			stat.executeUpdate("UPDATE saveState_gameInfo SET active=1 WHERE saveName='" + saveName +"';");	
 		} catch (SQLException e) {
@@ -139,7 +133,8 @@ public class Database {
 	}
 	
 	public String getActiveLoad() {
-		refresh();
+		System.out.println("Get active load");
+
 		String gameName = "";
 		try {
 			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo WHERE active=1;");
@@ -147,7 +142,10 @@ public class Database {
 				gameName = results.getString(1);
 			}
 			System.out.println(gameName);
-			stat.executeUpdate("UPDATE saveState_gameInfo SET active=0 WHERE saveName='" + gameName +"';");
+			System.out.println("Update active load");
+			if (!gameName.isEmpty()) {
+				stat.executeUpdate("UPDATE saveState_gameInfo SET active=0 WHERE saveName='" + gameName +"';");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			news = new BadNews("Sorry: You can't get that load");
@@ -156,7 +154,6 @@ public class Database {
 	}
 	
 	public int getAspectofGameState(String name, String what) {
-		refresh();
 		int returning = 0;
 		try {
 			ResultSet results = stat.executeQuery("SELECT "+ what+ " FROM saveState_gameInfo WHERE saveName='" + name + "';");
@@ -171,7 +168,6 @@ public class Database {
 
 	//interacting with saveState_ships
 	public void saveShips(ArrayList<Ship> enemyShips, PlayerShip myShip, String saveName) {
-		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_ships WHERE saveName='" + saveName + "';");
 			for (Ship each : enemyShips) {
@@ -190,7 +186,6 @@ public class Database {
 	}
 
 	public ArrayList<Ship> getEnemyShips(String saveName) { // Player Ship in last
-		refresh();
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		Ship shipBuilder;
 		try {
@@ -210,7 +205,6 @@ public class Database {
 	}
 
 	public PlayerShip getPlayerShip(String saveName) { //saveName, x (2), y (3), xSize (4), ySize (5), type
-		refresh();
 		PlayerShip shipBuilder = null;
 		try {
 			ResultSet result = stat
@@ -228,23 +222,61 @@ public class Database {
 
 	//interacting with saveState_bullets
 	public void saveBullets(ArrayList<Ship> enemyBullets, ArrayList<Ship> playerBullets, String saveName) { // TODO
-		refresh();
 		try {
 			stat.executeUpdate("DELETE FROM saveState_bullets WHERE saveName='" + saveName + "';");
 			for (Ship each : enemyBullets) {
-				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy) VALUES " + "('" + saveName
+				System.out.println("INSERT INTO saveState_bullets (saveName, x, y, dx, dy, type) VALUES " + "('" + saveName
 						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + ((Bullet) each).getDX() + ", " + ((Bullet) each).getDY()
-						+ ");");
+						+", 'enemy"+ "');");
+				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy, type) VALUES " + "('" + saveName
+						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + ((Bullet) each).getDX() + ", " + ((Bullet) each).getDY()
+						+", 'enemy"+ "');");
 			}
 			for (Ship each : playerBullets) {
-				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy) VALUES " + "('" + saveName
+				stat.executeUpdate("INSERT INTO saveState_bullets (saveName, x, y, dx, dy, type) VALUES " + "('" + saveName
 						+ "', " + each.getXCord() + ", " + each.getYCord() + ", " + ((Bullet) each).getDX() + ", " + ((Bullet) each).getDY()
-						+ ");");
+						+ ", 'me'" + ");");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			news = new BadNews("Couldn't save bullets");
 		}
+	}
+	
+	public ArrayList<Bullet> getEnemyBullets(String saveName) { //syntax: Rectangle ship, double xSize, double ySize, double xCord, double yCord, double dx, double dy
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+		Bullet b; 
+		try {
+			ResultSet results = stat.executeQuery("SELECT * FROM saveState_bullets WHERE saveName='" + saveName + "' AND type='enemy';");
+			while (results.next()) {
+				Rectangle r = new Rectangle();
+				b = new Bullet(r, 5, 12, results.getDouble(2), results.getDouble(3), results.getDouble(4),
+						results.getDouble(5));
+				bullets.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			news = new BadNews("Can't load enemy bullets");
+		}
+		return bullets;
+	}
+	
+	public ArrayList<Bullet> getMyBullets(String saveName) { //syntax: Rectangle ship, double xSize, double ySize, double xCord, double yCord, double dx, double dy
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+		Bullet b; 
+		try {
+			ResultSet results = stat.executeQuery("SELECT * FROM saveState_bullets WHERE saveName='" + saveName + "' AND type='me';");
+			while (results.next()) {
+				Rectangle r = new Rectangle();
+				b = new Bullet(r, 5, 12, results.getDouble(2), results.getDouble(3), results.getDouble(4),
+						results.getDouble(5));
+				bullets.add(b);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			news = new BadNews("Can't load enemy bullets");
+		}
+		return bullets;
 	}
 
 }
