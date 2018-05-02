@@ -19,11 +19,10 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import ships.PlayerShip;
 
+import javax.swing.*;
 import java.beans.EventHandler;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 
 public class StartController {
@@ -79,11 +78,15 @@ public class StartController {
 	private void load() {
 		ArrayList<String> list = db.getSaveNames();
 		Object[] options = new Object[list.size()];
+		System.out.println(list);
 		for(int i=0; i<list.size(); i++) {
+
 			options[i] = list.get(i);
+			System.out.println("here...");
 		}
-		
-		String s = (String)JOptionPane.showInputDialog(
+		System.out.println(options[0]);
+
+		SwingUtilities.invokeLater(() -> {String s = (String) JOptionPane.showInputDialog(
 		                    null,
 		                   "Choose your saved game",
 		                    "Customized Dialog",
@@ -91,9 +94,11 @@ public class StartController {
 		                    null,
 		                    options,
 		                    null);
+		System.out.println(s);
 		if (s != null) {
+			System.out.println("hi");
 			loadGameState(s);
-		}
+		}});
 	}
 
 
@@ -102,6 +107,7 @@ public class StartController {
 
 	private void loadGameState(String s) {
 		db.setActiveLoad(s);
+
 		toMainScreen();
 	}
 

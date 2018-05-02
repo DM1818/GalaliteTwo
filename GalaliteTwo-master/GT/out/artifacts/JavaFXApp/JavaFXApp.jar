@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GalaliteController">
+   <children>
+      <SplitPane dividerPositions="0.7" layoutX="151.0" layoutY="91.0" prefHeight="361.0" prefWidth="572.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <Pane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <ImageView fitHeight="498.0" fitWidth="746.0" layoutX="-118.0">
+                     <image>
+                        <Image url="@assets/space_bg.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="mainTitle" layoutX="76.0" layoutY="158.0" text="Galalite 2: The Revengence" textFill="WHITE">
+                     <font>
+                        <Font size="34.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="start" layoutX="245.0" layoutY="249.0" mnemonicParsing="false" onAction="#clickStart" text="Start!" />
+                  <Button fx:id="load" layoutX="225.0" layoutY="315.0" mnemonicParsing="false" text="Load Game" />
+                  <ListView fx:id="highscoreList" layoutX="170.0" layoutY="378.0" prefHeight="106.0" prefWidth="206.0" />
+               </children>
+            </Pane>
+            <VBox prefHeight="350.0" prefWidth="207.0" style="-fx-background-color: mistyrose; -fx-border-color: black;" SplitPane.resizableWithParent="false">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="150.0" />
+               </padding>
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: mediumpurple; -fx-border-color: black;">
+                     <children>
+                        <Label fx:id="score" layoutX="14.0" layoutY="14.0" text="Score:">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lives" layoutX="14.0" layoutY="90.0" text="Lives:">
+                           <font>
+                              <Font size="33.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="currentHighscore" layoutX="14.0" layoutY="176.0" text="Highscore:" />
+                     </children>
+                  </Pane>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

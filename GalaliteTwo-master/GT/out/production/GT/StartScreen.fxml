@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="startScreen" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StartController">
+   <children>
+      <ImageView fitHeight="240.0" fitWidth="782.0" layoutX="85.0" layoutY="-150.0" preserveRatio="true" smooth="false" AnchorPane.leftAnchor="217.0" AnchorPane.topAnchor="50.0">
+         <image>
+            <Image url="@assets/title.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="283.0" layoutY="189.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ListView fx:id="highscoreList" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black;" VBox.vgrow="NEVER">
+               <VBox.margin>
+                  <Insets top="40.0" />
+               </VBox.margin></ListView>
+            <ImageView fitHeight="50.0" fitWidth="121.0" onMouseClicked="#toMainScreen" preserveRatio="true" smooth="false">
+               <image>
+                  <Image url="@assets/start.png" />
+               </image>
+               <VBox.margin>
+                  <Insets left="220.0" top="100.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fitHeight="51.0" fitWidth="108.0" onMouseClicked="#load" preserveRatio="true" smooth="false">
+               <image>
+                  <Image url="@assets/load.png" />
+               </image>
+               <VBox.margin>
+                  <Insets left="225.0" top="50.0" />
+               </VBox.margin>
+            </ImageView>
+         </children>
+         <padding>
+            <Insets top="100.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

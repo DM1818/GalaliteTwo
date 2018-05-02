@@ -110,6 +110,7 @@ public class Database {
 		try {
 			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo;");
 			while (results.next()) {
+				System.out.println("adding name");
 				names.add(results.getString(1));
 			}
 
