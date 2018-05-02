@@ -31,8 +31,10 @@ import ships.PlayerShip;
 import ships.Ship;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import core.BadNews;
 import core.Database;
 
 public class MainController {
@@ -72,14 +74,13 @@ public class MainController {
 	private int enemyRows = 3;
 	private int enemyColumns = 5;
 
-
 	private int count;
 	private int dir;
 
 	private int lives = 3;
 	private int score = 0;
-	
-	
+
+	private static BadNews error;
 
 	@FXML
 	private void initialize() {
@@ -91,46 +92,63 @@ public class MainController {
 			setUpEnemy();
 			setUpKeyListener();
 			gamePane.requestFocus();
-			
+
 		});
 
 		// System.out.println("Hello");
 	}
+
 	private void setUpGameState() {
-		System.out.println("loading...");
-		String loading = StartController.db.getActiveLoad();
-		if (!loading.equals("")) {
-			loadGame(loading);
-			Platform.runLater(() -> {
-				pause();
-			});
+		try {
+			String loading = StartController.db.getActiveLoad();
+			if (!loading.equals("")) {
+				loadGame(loading);
+				Platform.runLater(() -> {
+					pause();
+				});
+			}
+			StartController.db.deactivateLoad();
+			updateLives();
+			updateScore();
+			highscoreLabel.setText("Highscore: " + StartController.db.getHighscore());
+		} catch (SQLException e) {
+			error = new BadNews("Error in loading retreiving load information.");
+			e.printStackTrace();
 		}
-		updateLives();
-		updateScore();
-		highscoreLabel.setText("Highscore: " + StartController.db.getHighscore());
-		
+
 	}
 
 	private void loadGame(String loading) {
-		lives = StartController.db.getAspectofGameState(loading, "lives");
-		score = StartController.db.getAspectofGameState(loading, "score");
-		enemyObjects = StartController.db.getEnemyShips(loading);
-		player = StartController.db.getPlayerShip(loading);
-		loadBullets(loading);
+		try {
+			lives = StartController.db.getAspectofGameState(loading, "lives");
+			score = StartController.db.getAspectofGameState(loading, "score");
+			enemyObjects = StartController.db.getEnemyShips(loading);
+			player = StartController.db.getPlayerShip(loading);
+			loadBullets(loading);
+		} catch (SQLException e) {
+			error = new BadNews("Error in loading game state.");
+			e.printStackTrace();
+		}
 	}
 
 	private void loadBullets(String loadName) {
-		ArrayList<Bullet> loadingBullets = StartController.db.getEnemyBullets(loadName);
-		for (Bullet each : loadingBullets) {
-			enemyBullets.add(each);
-			each.draw();
-		}
-		loadingBullets = StartController.db.getMyBullets(loadName);
-		for (Bullet each : loadingBullets) {
-			playerBullets.add(each);
-			each.draw();
+		try {
+			ArrayList<Bullet> loadingBullets = StartController.db.getEnemyBullets(loadName);
+			for (Bullet each : loadingBullets) {
+				enemyBullets.add(each);
+				each.draw();
+			}
+			loadingBullets = StartController.db.getMyBullets(loadName);
+			for (Bullet each : loadingBullets) {
+				playerBullets.add(each);
+				each.draw();
+			}
+		} catch (SQLException e) {
+			error = new BadNews("Error in loading bullets.");
+			e.printStackTrace();
 		}
 	}
+
 	private void updateLives() {
 		livesLabel.setText("Lives: " + lives);
 	}
@@ -160,7 +178,7 @@ public class MainController {
 				switch (event.getCode()) {
 				case SPACE:
 					spawnPlayerBullet();
-					
+
 					break;
 				case A:
 					currentKey = event.getCode();
@@ -229,9 +247,9 @@ public class MainController {
 		} else {
 			oldEnemies();
 		}
-		
+
 	}
-	
+
 	private void oldEnemies() {
 		for (Ship each : enemyObjects) {
 			each.draw();
@@ -245,7 +263,7 @@ public class MainController {
 				double yLength = ((gamePane.getHeight() * 0.5) / (enemyRows * 2));
 				double xCord = (xLength * 2) * i + (gamePane.getWidth() * 0.25);
 				double yCord = (yLength * 2) * i2 + (gamePane.getHeight() * 0.1);
-				
+
 				Rectangle r = new Rectangle(5, 5);
 				gamePane.getChildren().add(r);
 				EnemyShip baddy = new EnemyShip(r, xLength, yLength, xCord, yCord);
@@ -281,12 +299,27 @@ public class MainController {
 			@Override
 			public void handle(ActionEvent event) {
 				String saveName = tf.getText();
-				StartController.db.saveShips(enemyObjects, player, saveName);
-				StartController.db.saveBullets(enemyBullets, playerBullets, saveName);
-				StartController.db.insertGameInfo(saveName, lives, score);
+				try {
+					StartController.db.saveShips(enemyObjects, player, saveName);
+					StartController.db.saveBullets(enemyBullets, playerBullets, saveName);
+					StartController.db.insertGameInfo(saveName, lives, score);
+				} catch (SQLException e) {
+					error = new BadNews("Error in saving game state.");
+					e.printStackTrace();
+				}
 			}
 		});
 		dialogVbox.getChildren().add(save);
+		
+		Button backToMain = new Button("Back to Main Screen");
+		backToMain.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				changeScene("StartScreen.fxml");
+				dialog.close();
+			}
+		});
+		dialogVbox.getChildren().add(backToMain);
 
 		Scene dialogScene = new Scene(dialogVbox, 500, 300);
 		dialog.setScene(dialogScene);
@@ -300,33 +333,37 @@ public class MainController {
 		});
 	}
 
+	private void saveHighScore() { // TODO
 
-private void saveHighScore() {
-   
-      final Stage dialog = new Stage();
-      dialog.initModality(Modality.APPLICATION_MODAL);
-      dialog.initOwner(Main.getStage());
-      VBox dialogVbox = new VBox(20);
-      dialogVbox.getChildren().add(new Text("Enter your name to save your high score"));
-      TextField tf = new TextField();
-      dialogVbox.getChildren().add(tf);
+		final Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(Main.getStage());
+		VBox dialogVbox = new VBox(20);
+		dialogVbox.getChildren().add(new Text("Enter your name to save your high score"));
+		TextField tf = new TextField();
+		dialogVbox.getChildren().add(tf);
 
-      Button b = new Button("Save Score");
-      b.setOnAction((event) -> {
-         String name = tf.getText();
-         StartController.db.insertHighscore(name, score);
-         dialog.close();
-      });
-      Button menu = new Button("Exit to Menu");
-      menu.setOnAction((event) -> {
-         changeScene("StartScreen.fxml");
-      });
-      dialogVbox.getChildren().add(b);
-      Scene dialogScene = new Scene(dialogVbox, 300, 200);
-      dialog.setScene(dialogScene);
-      dialog.show();
-   
-}
+		Button b = new Button("Save Score");
+		b.setOnAction((event) -> {
+			String name = tf.getText();
+			try {
+				StartController.db.insertHighscore(name, score);
+			} catch (SQLException e) {
+				error = new BadNews("Error in saving highscore.");
+				e.printStackTrace();
+			}
+			dialog.close();
+		});
+		Button menu = new Button("Exit to Menu");
+		menu.setOnAction((event) -> {
+			changeScene("StartScreen.fxml");
+		});
+		dialogVbox.getChildren().add(b);
+		Scene dialogScene = new Scene(dialogVbox, 300, 200);
+		dialog.setScene(dialogScene);
+		dialog.show();
+
+	}
 
 	private ArrayList<ArrayList<Ship>> detectCollision() {
 		// check friendly collision
@@ -414,7 +451,7 @@ private void saveHighScore() {
 	private void enemyFire(Ship e) {
 		if (Math.random() * (enemyObjects.size() + enemyBullets.size()) * 8 <= 1) {
 			spawnEnemyBullet(e);
-			//System.out.println(enemyBullets.size() + "  " + enemyObjects.size());
+			// System.out.println(enemyBullets.size() + " " + enemyObjects.size());
 		}
 	}
 
@@ -542,14 +579,14 @@ private void saveHighScore() {
 		}
 
 	}
-	private void changeScene(String fxml) {
-		   try {
-		     Parent pane = FXMLLoader.load(
-		            getClass().getResource(fxml));
-			   Main.getStage().getScene().setRoot(pane);
 
-		   } catch (IOException e) {
-		      e.printStackTrace();
-		   }
+	private void changeScene(String fxml) {
+		try {
+			Parent pane = FXMLLoader.load(getClass().getResource(fxml));
+			Main.getStage().getScene().setRoot(pane);
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
 }

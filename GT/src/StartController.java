@@ -2,7 +2,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import core.Database;
-
+import core.BadNews;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +22,7 @@ import ships.PlayerShip;
 import javax.swing.*;
 import java.beans.EventHandler;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -61,12 +62,27 @@ public class StartController {
 
 
 
-	static Database db = new Database();
+	public static Database db;
+	private static BadNews error;
+	
+	static {
+		try {
+			db = new Database();
+		} catch (ClassNotFoundException | SQLException e) {
+			error = new BadNews("We could not load your database.");
+			e.printStackTrace();
+		}
+	}
 
 
 	public void initialize() {
 		stage = Main.getStage();
-		highscoreList.setItems(db.getAllHighscores());
+		try {
+			highscoreList.setItems(db.getAllHighscores());
+		} catch (SQLException e) {
+			error = new BadNews("We could not load your highscores.");
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -76,15 +92,14 @@ public class StartController {
 
 	@FXML
 	private void load() {
+		try {
 		ArrayList<String> list = db.getSaveNames();
 		Object[] options = new Object[list.size()];
 		System.out.println(list);
 		for(int i=0; i<list.size(); i++) {
 
 			options[i] = list.get(i);
-			System.out.println("here...");
 		}
-		System.out.println(options[0]);
 
 		SwingUtilities.invokeLater(() -> {String s = (String) JOptionPane.showInputDialog(
 		                    null,
@@ -94,11 +109,14 @@ public class StartController {
 		                    null,
 		                    options,
 		                    null);
-		System.out.println(s);
 		if (s != null) {
 			System.out.println("hi");
 			loadGameState(s);
 		}});
+		} catch (SQLException e) {
+			error = new BadNews("We could not load your saves.");
+			e.printStackTrace();
+		}
 	}
 
 
@@ -106,7 +124,12 @@ public class StartController {
 
 
 	private void loadGameState(String s) {
-		db.setActiveLoad(s);
+		try {
+			db.setActiveLoad(s);
+		} catch (SQLException e) {
+			error = new BadNews("We could not set that load.");
+			e.printStackTrace();
+		}
 
 		toMainScreen();
 	}
@@ -114,7 +137,6 @@ public class StartController {
 
 
 	private void changeScene(String fxml) {
-		System.out.println(state);
 		try {
 			pane = FXMLLoader.load(
                     getClass().getResource(fxml));
