@@ -1,3 +1,4 @@
+
 import javafx.fxml.FXML;
 import core.Database;
 import core.BadNews;
@@ -14,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
