@@ -354,10 +354,7 @@ public class MainController {
 			}
 			dialog.close();
 		});
-		Button menu = new Button("Exit to Menu");
-		menu.setOnAction((event) -> {
-			changeScene("StartScreen.fxml");
-		});
+	
 		dialogVbox.getChildren().add(b);
 		Scene dialogScene = new Scene(dialogVbox, 300, 200);
 		dialog.setScene(dialogScene);
@@ -586,6 +583,7 @@ public class MainController {
 			Main.getStage().getScene().setRoot(pane);
 
 		} catch (IOException e) {
+			error = new BadNews("Couldn't go back to Main Screen");
 			e.printStackTrace();
 		}
 	}
