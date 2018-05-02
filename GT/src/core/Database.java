@@ -133,8 +133,6 @@ public class Database {
 	}
 	
 	public String getActiveLoad() {
-		System.out.println("Get active load");
-
 		String gameName = "";
 		try {
 			ResultSet results = stat.executeQuery("SELECT saveName FROM saveState_gameInfo WHERE active=1;");

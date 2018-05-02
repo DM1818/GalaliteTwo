@@ -59,7 +59,6 @@ public class MainController {
 	private ImageView currentBG;
 	private ImageView nextBG;
 	private double bgSpeed = 10;
-	private long bgInterval = 100000L / fps;
 
 	@FXML
 	private Pane gamePane;
@@ -73,7 +72,6 @@ public class MainController {
 	private int enemyRows = 3;
 	private int enemyColumns = 5;
 
-	private Parent parent;
 
 	private int count;
 	private int dir;
