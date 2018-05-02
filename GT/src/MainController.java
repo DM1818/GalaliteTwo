@@ -1,3 +1,4 @@
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -352,8 +353,15 @@ public class MainController {
 				error = new BadNews("Error in saving highscore.");
 				e.printStackTrace();
 			}
+  			changeScene("StartScreen.fxml");
 			dialog.close();
 		});
+		dialog.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	  			changeScene("StartScreen.fxml");
+	          }
+	      });        
+
 	
 		dialogVbox.getChildren().add(b);
 		Scene dialogScene = new Scene(dialogVbox, 300, 200);
@@ -414,7 +422,6 @@ public class MainController {
 		} else {
 			clock.stop();
 			saveHighScore();
-			changeScene("StartScreen.fxml");
 		}
 
 	}
