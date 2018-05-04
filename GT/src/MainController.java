@@ -1,4 +1,3 @@
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -74,6 +73,7 @@ public class MainController {
 
 	private int enemyRows = 3;
 	private int enemyColumns = 5;
+	private int armastice = 100;
 
 	private int count;
 	private int dir;
@@ -93,10 +93,8 @@ public class MainController {
 			setUpEnemy();
 			setUpKeyListener();
 			gamePane.requestFocus();
-
+			armastice = 100;
 		});
-
-		// System.out.println("Hello");
 	}
 
 	private void setUpGameState() {
@@ -311,7 +309,7 @@ public class MainController {
 			}
 		});
 		dialogVbox.getChildren().add(save);
-		
+
 		Button backToMain = new Button("Back to Main Screen");
 		backToMain.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -360,9 +358,9 @@ public class MainController {
 	          public void handle(WindowEvent we) {
 	  			changeScene("StartScreen.fxml");
 	          }
-	      });        
+	      });
 
-	
+
 		dialogVbox.getChildren().add(b);
 		Scene dialogScene = new Scene(dialogVbox, 300, 200);
 		dialog.setScene(dialogScene);
@@ -399,6 +397,7 @@ public class MainController {
 			if (detectCollisionHelper(player, b)) {
 				takeDamage();
 				enemyBulletsToRemove.addAll(enemyBullets);
+				armastice = 100;
 			}
 			if (detectOutOfBoundBullets(b)) {
 				enemyBulletsToRemove.add(b);
@@ -517,8 +516,8 @@ public class MainController {
 			}
 			/*
 			 * if (now - lastBGInterval >= bgInterval) { lastBGInterval = now;
-			 * 
-			 * 
+			 *
+			 *
 			 * //checkBG(); //System.out.println("1 " + bg1.getLayoutY());
 			 * //System.out.println("2 " + bg2.getLayoutY()); }
 			 */
@@ -533,7 +532,19 @@ public class MainController {
 		redraw();
 		updateScore();
 		updateLives();
+
+		if (enemyObjects.size() == 0) {
+			nextStage();
+		}
 	}
+
+	private void nextStage() {
+    	enemyBullets.clear();
+    	playerBullets.clear();
+    	armastice = 100;
+
+    	setUpEnemy();
+    }
 
 	private void redraw() {
 
@@ -544,11 +555,14 @@ public class MainController {
 			dir *= -1;
 		}
 
+		armastice--;
 		for (Ship e : enemyObjects) {
 			gamePane.getChildren().add(e.getRect());
-			enemyFire(e);
 			e.move(dir);
 			e.draw();
+			if (armastice < 1) {
+				enemyFire(e);
+			}
 		}
 		for (Ship s : playerBullets) {
 			gamePane.getChildren().add(s.getRect());
